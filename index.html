@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Ridhi 🎉</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&family=Space+Grotesk:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Hidden Elements -->
+    <div id="konami-overlay" class="hidden">RIDHI ULTIMATE MODE ACTIVATED 🚀</div>
+    <div id="easter-egg-msg" class="hidden">You found the secret message! Now give me ₹500.</div>
+
+    <!-- Global Audio -->
+    <button id="mute-toggle" class="floating-btn" aria-label="Toggle Audio">🔊</button>
+    <!-- We will use JS Audio objects instead of audio tags to easily manage sources -->
+
+    <!-- Main Container -->
+    <main id="app-container">
+
+        <!-- Page 1: Hero Cover Pattern -->
+        <section id="page-hero" class="page active">
+            <!-- HOVER MASK REVEAL AS BACKGROUND -->
+            <div class="hover-mask-container hero-mask" id="hero-hover-mask">
+                <div class="mask-base-layer">
+                    <img src="/hero-bg.png" alt="Hero Background Base" style="filter: grayscale(100%); opacity: 0.8;" />
+                </div>
+                <div class="mask-reveal-layer" id="hero-reveal-layer">
+                    <img src="/hero-bg.png" alt="Hero Background Reveal" />
+                </div>
+            </div>
+
+            <!-- FOREGROUND CONTENT -->
+            <div class="hero-content text-center" style="position: relative; z-index: 10;">
+                <div class="fade-away-wrapper">
+                    <h1 class="bounce-text gradient-text"
+                        style="font-size: 5rem; line-height: 1.1; text-shadow: 4px 4px 0px var(--shadow-color);">
+                        HAPPY<br>BIRTHDAY<br>RIDHI! 🎉</h1>
+                </div>
+                <!-- We removed the subtitle since the hero text is floating away anyway 
+                     and we want it clean in the center. But let's keep it if she wants. -->
+                <p class="subtitle mt-3 font-bold fade-away-wrapper"
+                    style="color: black; font-size: 1.5rem; text-shadow: 2px 2px 0px white; margin-bottom: 2rem;">
+                    Welcome to the most
+                    unnecessary but highly engineered birthday website ever created.</p>
+            </div>
+
+            <!-- Absolute bottom button -->
+            <div
+                style="position: absolute; bottom: 80px; z-index: 10; width: 100%; display: flex; justify-content: center;">
+                <button id="enter-btn" class="quirky-btn primary next-page-btn" data-target="page-gifts"
+                    style="font-size: 1.3rem;">Unleash
+                    the Chaos ➡️</button>
+            </div>
+            <div class="mask-cursor-hint" style="bottom: 50px;">Hover around the background! 🪄</div>
+        </section>
+
+        <!-- Page 3: Gift Shop -->
+        <section id="page-gifts" class="page hidden">
+            <div class="quirky-panel text-center" style="max-width: 900px;">
+                <h2 class="glitch-text" data-text="Claim Your Birthday Gifts 🎁" style="color: black;">Claim Your
+                    Birthday Gifts 🎁</h2>
+                <p class="subtitle mt-2">Choose all the gifts you want. (Terms and conditions apply)</p>
+
+                <div class="gifts-grid mt-4">
+                    <div class="gift-item" data-price="80000">📱 iPhone 15 Pro <br><span>₹80,000</span></div>
+                    <div class="gift-item" data-price="120000">💻 MacBook M3 <br><span>₹1,20,000</span></div>
+                    <div class="gift-item" data-price="35000">🏖️ Goa Trip <br><span>₹35,000</span></div>
+                    <div class="gift-item" data-price="50000">🛍️ Shopping Spree <br><span>₹50,000</span></div>
+                    <div class="gift-item" data-price="250000">💍 Diamond Ring <br><span>₹2,50,000</span></div>
+                    <div class="gift-item" data-price="99999999">🍲 Infinite Mom's Food <br><span>Priceless</span></div>
+                    <div class="gift-item" data-price="150">🫂 Emotional Support Brother <br><span>₹150</span></div>
+                    <div class="gift-item" data-price="500000">✈️ World Tour <br><span>₹5,00,000</span></div>
+                </div>
+
+                <button class="quirky-btn primary mt-4" id="submit-gifts-btn">Submit My Humble Requests</button>
+            </div>
+        </section>
+
+        <!-- Page 4: Timeline -->
+        <section id="page-timeline" class="page hidden">
+            <div class="quirky-panel text-center" style="max-width: 900px; padding: 20px;">
+                <h2 class="bounce-text" style="color: black;">The Ridhi Cinematic Universe 🧬</h2>
+                <p class="subtitle mt-2 mb-4">A documented history of chaos.</p>
+
+                <div class="timeline mt-4 text-left">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">👶</div>
+                        <div class="timeline-content">
+                            <h3>Childhood Chaos</h3>
+                            <p>Here we see Ridhi discovering the ancient art of destruction. Toys were harmed.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🎒</div>
+                        <div class="timeline-content">
+                            <h3>School Days</h3>
+                            <p>Homework was eaten (allegedly by the dog), drama was created, grades were... decent.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🎓</div>
+                        <div class="timeline-content">
+                            <h3>College Era</h3>
+                            <p>Surviving entirely on instant noodles and last-minute panic studying.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🧨</div>
+                        <div class="timeline-content">
+                            <h3>New Year's Eve Adventures</h3>
+                            <p>Peak chaotic energy unleashed. Fireworks weren't the only things exploding.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🎂</div>
+                        <div class="timeline-content">
+                            <h3>Present Day</h3>
+                            <p>Becoming older but definitely not wiser. The chaos continues.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="quirky-btn primary mt-4 next-page-btn" data-target="page-video">Show me the evidence
+                    ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 5: Documentary & Roast -->
+        <section id="page-video" class="page hidden">
+            <div class="quirky-panel text-center">
+                <h2 style="color: black;">The Documentary of Ridhi's Life 🎬</h2>
+                <p class="subtitle mt-2">A cinematic masterpiece nobody asked for.</p>
+
+                <div class="video-container mt-4">
+                    <!-- Placeholder using an iframe block. The user can swap src later -->
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);"></iframe>
+                </div>
+
+                <div class="roast-section mt-4 pt-3">
+                    <h3 class="mb-2" style="color: black;">Need a reality check?</h3>
+                    <button class="quirky-btn primary" id="roast-btn">Generate Ridhi Facts</button>
+                    <div id="roast-display" class="mt-3 hidden glitch-text"
+                        style="font-size: 1.2rem; line-height: 1.5; min-height: 50px; color: black;" data-text=""></div>
+                </div>
+
+                <button class="quirky-btn primary mt-4 next-page-btn" data-target="page-games">Enough trauma for today
+                    ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 5.5: Minigames / Not yet brother -->
+        <section id="page-games" class="page hidden text-center"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh;">
+            <h1 class="bounce-text gradient-text mb-4"
+                style="font-size: 5rem; text-shadow: 4px 4px 0px var(--shadow-color);">Not yet brother 😈</h1>
+            <p class="subtitle mb-4 subtitle-games"
+                style="font-size: 1.5rem; max-width: 600px; color: black; text-shadow: 2px 2px 0px white;">
+                You thought you could escape without playing some chaotic minigames? Prove your worth.
+            </p>
+
+            <!-- Games will be injected here later -->
+            <div id="minigames-container" style="margin: 2rem 0;">
+                <p style="font-size: 1.2rem; font-style: italic; color: var(--text-muted);">(Minigames arriving soon!)
+                </p>
+            </div>
+
+            <button class="quirky-btn primary mt-5 next-page-btn" data-target="page-end" style="font-size: 1.5rem;">
+                Okay NOW you can proceed to the end ➡️
+            </button>
+        </section>
+
+        <!-- Page 6: Final Page -->
+        <section id="page-end" class="page hidden">
+            <div class="quirky-panel text-center">
+                <h1 class="gradient-text bounce-text" style="font-size: 5rem;">Happy Birthday Ridhi ❤️</h1>
+                <p class="subtitle mt-3 mb-4" style="font-size: 1.5rem; max-width: 600px; margin: 1.5rem auto;">This
+                    website took unnecessary effort but maximum love. Hope you have the best birthday ever!</p>
+
+                <div class="floating-hearts mt-4">
+                    💖 ✨ 🎉 💖 ✨ 🎉
+                </div>
+
+                <button class="quirky-btn primary mt-4 next-page-btn" data-target="page-hero">Re-live the Chaos
+                    🔄</button>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
