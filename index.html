@@ -10,7 +10,7 @@
         rel="stylesheet">
 </head>
 
-<body>
+<body class="dark-theme">
     <!-- Hidden Elements -->
     <div id="konami-overlay" class="hidden">RIDHI ULTIMATE MODE ACTIVATED 🚀</div>
     <div id="easter-egg-msg" class="hidden">You found the secret message! Now give me ₹500.</div>
@@ -59,32 +59,78 @@
             <div class="mask-cursor-hint" style="bottom: 50px;">Hover around the background! 🪄</div>
         </section>
 
-        <!-- Page 3: Gift Shop -->
+         <!-- Page 3: Gift Shop -->
         <section id="page-gifts" class="page hidden">
-            <div class="quirky-panel text-center" style="max-width: 900px;">
-                <h2 class="glitch-text" data-text="Claim Your Birthday Gifts 🎁" style="color: black;">Claim Your
-                    Birthday Gifts 🎁</h2>
-                <p class="subtitle mt-2">Choose all the gifts you want. (Terms and conditions apply)</p>
+            <!-- Back Button -->
+            <button class="back-btn quirky-btn gifts-back-btn" data-target="page-hero">← Back</button>
 
-                <div class="gifts-grid mt-4">
-                    <div class="gift-item" data-price="80000">📱 iPhone 15 Pro <br><span>₹80,000</span></div>
-                    <div class="gift-item" data-price="120000">💻 MacBook M3 <br><span>₹1,20,000</span></div>
-                    <div class="gift-item" data-price="35000">🏖️ Goa Trip <br><span>₹35,000</span></div>
-                    <div class="gift-item" data-price="50000">🛍️ Shopping Spree <br><span>₹50,000</span></div>
-                    <div class="gift-item" data-price="250000">💍 Diamond Ring <br><span>₹2,50,000</span></div>
-                    <div class="gift-item" data-price="99999999">🍲 Infinite Mom's Food <br><span>Priceless</span></div>
-                    <div class="gift-item" data-price="150">🫂 Emotional Support Brother <br><span>₹150</span></div>
-                    <div class="gift-item" data-price="500000">✈️ World Tour <br><span>₹5,00,000</span></div>
+            <!-- Zone 1: Header strip (top, narrow) -->
+            <div class="gifts-header-zone">
+                <h2 class="gifts-title">🎁 Claim Your Birthday Gifts</h2>
+                <p class="gifts-subtitle">Pick whatever you want. (Bro will cry later.)</p>
+            </div>
+
+            <!-- Zone 2: Full-width image -->
+            <div class="gifts-top-half">
+                <img src="/Untitled design.png" alt="Birthday Gift Banner" class="gifts-hero-img" />
+            </div>
+
+            <!-- Zone 3: Gift grid -->
+            <div class="gifts-bottom-half">
+                <div class="gifts-bottom-inner">
+                    <div class="gifts-grid-compact">
+                        <div class="gift-card" data-price="80000">
+                            <span class="gift-emoji">📱</span>
+                            <span class="gift-name">iPhone 15 Pro</span>
+                            <span class="gift-price">₹80,000</span>
+                        </div>
+                        <div class="gift-card" data-price="120000">
+                            <span class="gift-emoji">💻</span>
+                            <span class="gift-name">MacBook M3</span>
+                            <span class="gift-price">₹1,20,000</span>
+                        </div>
+                        <div class="gift-card" data-price="35000">
+                            <span class="gift-emoji">🏖️</span>
+                            <span class="gift-name">Goa Trip</span>
+                            <span class="gift-price">₹35,000</span>
+                        </div>
+                        <div class="gift-card" data-price="50000">
+                            <span class="gift-emoji">🛍️</span>
+                            <span class="gift-name">Shopping Spree</span>
+                            <span class="gift-price">₹50,000</span>
+                        </div>
+                        <div class="gift-card" data-price="250000">
+                            <span class="gift-emoji">💍</span>
+                            <span class="gift-name">Diamond Ring</span>
+                            <span class="gift-price">₹2,50,000</span>
+                        </div>
+                        <div class="gift-card" data-price="99999999">
+                            <span class="gift-emoji">🍲</span>
+                            <span class="gift-name">Mom's Food ∞</span>
+                            <span class="gift-price">Priceless</span>
+                        </div>
+                        <div class="gift-card" data-price="150">
+                            <span class="gift-emoji">🫂</span>
+                            <span class="gift-name">Support Bro</span>
+                            <span class="gift-price">₹150</span>
+                        </div>
+                        <div class="gift-card" data-price="500000">
+                            <span class="gift-emoji">✈️</span>
+                            <span class="gift-name">World Tour</span>
+                            <span class="gift-price">₹5,00,000</span>
+                        </div>
+                    </div>
+                    <button class="gifts-submit-btn" id="submit-gifts-btn">✨ Submit My Wishlist ✨</button>
                 </div>
-
-                <button class="quirky-btn primary mt-4" id="submit-gifts-btn">Submit My Humble Requests</button>
             </div>
         </section>
 
         <!-- Page 4: Timeline -->
         <section id="page-timeline" class="page hidden">
+            <!-- Back Button -->
+            <button class="back-btn quirky-btn" data-target="page-gifts">← Back</button>
             <div class="quirky-panel text-center" style="max-width: 900px; padding: 20px;">
-                <h2 class="bounce-text" style="color: black;">The Ridhi Cinematic Universe 🧬</h2>
+                <h2 class="bounce-text">The Ridhi Cinematic Universe 🧬</h2>
                 <p class="subtitle mt-2 mb-4">A documented history of chaos.</p>
 
                 <div class="timeline mt-4 text-left">
@@ -132,8 +178,10 @@
 
         <!-- Page 5: Documentary & Roast -->
         <section id="page-video" class="page hidden">
+            <!-- Back Button -->
+            <button class="back-btn quirky-btn" data-target="page-timeline">← Back</button>
             <div class="quirky-panel text-center">
-                <h2 style="color: black;">The Documentary of Ridhi's Life 🎬</h2>
+                <h2>The Documentary of Ridhi's Life 🎬</h2>
                 <p class="subtitle mt-2">A cinematic masterpiece nobody asked for.</p>
 
                 <div class="video-container mt-4">
@@ -159,10 +207,12 @@
         <!-- Page 5.5: Minigames / Not yet brother -->
         <section id="page-games" class="page hidden text-center"
             style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh;">
+            <!-- Back Button -->
+            <button class="back-btn quirky-btn" data-target="page-video" style="align-self: flex-start; margin: 20px 0 0 20px;">← Back</button>
             <h1 class="bounce-text gradient-text mb-4"
                 style="font-size: 5rem; text-shadow: 4px 4px 0px var(--shadow-color);">Not yet brother 😈</h1>
             <p class="subtitle mb-4 subtitle-games"
-                style="font-size: 1.5rem; max-width: 600px; color: black; text-shadow: 2px 2px 0px white;">
+                style="font-size: 1.5rem; max-width: 600px;">
                 You thought you could escape without playing some chaotic minigames? Prove your worth.
             </p>
 
@@ -179,6 +229,8 @@
 
         <!-- Page 6: Final Page -->
         <section id="page-end" class="page hidden">
+            <!-- Back Button -->
+            <button class="back-btn quirky-btn" data-target="page-games">← Back</button>
             <div class="quirky-panel text-center">
                 <h1 class="gradient-text bounce-text" style="font-size: 5rem;">Happy Birthday Ridhi ❤️</h1>
                 <p class="subtitle mt-3 mb-4" style="font-size: 1.5rem; max-width: 600px; margin: 1.5rem auto;">This

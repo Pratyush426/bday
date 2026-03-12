@@ -100,7 +100,7 @@ function navigateTo(pageId: string) {
 function setupNavigation() {
     document.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
-        if (target && target.classList.contains('next-page-btn')) {
+        if (target && (target.classList.contains('next-page-btn') || target.classList.contains('back-btn'))) {
             const dest = target.getAttribute('data-target');
             if (dest) navigateTo(dest);
         }
@@ -139,7 +139,7 @@ function setupHoverMask() {
 
     if (!container || !revealLayer) return;
 
-    let maskSize = 350; // Increased diameter for hero
+    let maskSize = 350;
 
     // Hide initially until mouse moves
     revealLayer.style.webkitMaskSize = `0px 0px`;
@@ -158,7 +158,7 @@ function setupHoverMask() {
 
 // --- GIFT SHOP ---
 function setupGiftShop() {
-    const items = document.querySelectorAll('.gift-item');
+    const items = document.querySelectorAll('.gift-card');
     const submitBtn = document.getElementById('submit-gifts-btn');
 
     if (!submitBtn) return;
@@ -170,7 +170,7 @@ function setupGiftShop() {
     });
 
     submitBtn.addEventListener('click', () => {
-        const selectedItems = document.querySelectorAll('.gift-item.selected');
+        const selectedItems = document.querySelectorAll('.gift-card.selected');
         let total = 0;
         selectedItems.forEach(item => {
             total += parseInt(item.getAttribute('data-price') || '0');

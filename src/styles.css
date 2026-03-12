@@ -1,13 +1,14 @@
 :root {
-    --bg-main: #fcf1e2;
-    --text-main: #111111;
-    --text-muted: #4a4a4a;
+    --bg-main: #0e0e14;
+    --bg-panel: #1a1a2a;
+    --text-main: #f0f0f5;
+    --text-muted: #9999bb;
     --accent-pink: #ff6b8b;
     --accent-blue: #4d96ff;
     --accent-yellow: #f9d56e;
     --shadow-color: #000000;
-    --border-color: #000000;
-    --error-color: #ff3333;
+    --border-color: #3a3a5c;
+    --error-color: #ff4d4d;
     font-family: 'Outfit', sans-serif;
 }
 
@@ -19,8 +20,8 @@
 
 body {
     background: var(--bg-main);
-    background-image: radial-gradient(var(--text-muted) 1px, transparent 0);
-    background-size: 20px 20px;
+    background-image: radial-gradient(rgba(77, 150, 255, 0.12) 1px, transparent 0);
+    background-size: 22px 22px;
     color: var(--text-main);
     min-height: 100vh;
     width: 100%;
@@ -28,6 +29,11 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
+}
+
+/* Dark theme overrides */
+.dark-theme {
+    color-scheme: dark;
 }
 
 /* Typography & Utility */
@@ -88,7 +94,6 @@ h3 {
 }
 
 #page-avatar,
-#page-gifts,
 #page-timeline,
 #page-video,
 #page-end {
@@ -110,11 +115,11 @@ h3 {
 
 /* Neo-Brutalist Components */
 .quirky-panel {
-    background: white;
-    border: 4px solid var(--border-color);
+    background: var(--bg-panel);
+    border: 3px solid var(--border-color);
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 8px 8px 0px var(--shadow-color);
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.6);
     transition: transform 0.2s ease;
     z-index: 10;
     position: relative;
@@ -122,11 +127,11 @@ h3 {
 
 .quirky-panel:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0px var(--shadow-color);
+    box-shadow: 12px 12px 0px rgba(0,0,0,0.8);
 }
 
 .quirky-btn {
-    background: white;
+    background: #22223a;
     border: 3px solid var(--border-color);
     border-radius: 8px;
     padding: 15px 30px;
@@ -144,16 +149,39 @@ h3 {
 .quirky-btn.primary {
     background: var(--accent-pink);
     color: white;
+    border-color: var(--accent-pink);
 }
 
 .quirky-btn:hover {
     background: var(--accent-yellow);
-    color: var(--text-main);
+    color: #111;
+    border-color: var(--accent-yellow);
 }
 
 .quirky-btn:active {
     transform: translate(4px, 4px);
     box-shadow: 0px 0px 0px var(--shadow-color);
+}
+
+/* Back button */
+.back-btn {
+    position: relative;
+    margin: 16px 0 12px 0;
+    padding: 10px 22px;
+    font-size: 0.95rem;
+    background: #1c1c30;
+    color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    box-shadow: 3px 3px 0px var(--shadow-color);
+    text-transform: none;
+    letter-spacing: 0;
+    z-index: 20;
+}
+
+.back-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
 }
 
 /* Specific Page Elements */
@@ -251,10 +279,10 @@ h3 {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: white;
+    background: #22223a;
     border: 3px solid var(--border-color);
     box-shadow: 4px 4px 0px var(--shadow-color);
-    color: black;
+    color: var(--text-main);
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 1000;
@@ -266,6 +294,7 @@ h3 {
 
 .floating-btn:hover {
     background: var(--accent-yellow);
+    color: #111;
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0px var(--shadow-color);
 }
@@ -409,23 +438,262 @@ h3 {
 
 
 
-/* Gift Shop */
-.gifts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
+/* ============================================
+   GIFT SHOP — full-viewport no-scroll split
+   ============================================ */
+
+/* Override app-container centering for gifts page */
+#page-gifts {
+    /* Full viewport takeover */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: none;
+    padding: 0;
+    margin: 0;
 }
 
+/* Zone 1: Header strip at the very top */
+.gifts-header-zone {
+    width: 100%;
+    height: 12vh;
+    flex-shrink: 0;
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(200, 100, 255, 0.15);
+}
+
+/* Back button now inside header zone — top-left */
+.gifts-back-btn {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    z-index: 50;
+    margin: 0;
+    background: rgba(14, 14, 20, 0.75);
+    backdrop-filter: blur(6px);
+    border: 2px solid var(--accent-blue);
+    color: var(--accent-blue);
+    padding: 6px 16px;
+    font-size: 0.85rem;
+}
+
+.gifts-back-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+}
+
+/* Zone 2: Image — middle strip */
+.gifts-top-half {
+    width: 100%;
+    height: 48vh;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.gifts-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+/* Bottom 40% — gifts */
+.gifts-bottom-half {
+    width: 100%;
+    height: 40vh;
+    flex-shrink: 0;
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 8px 28px;
+    border-top: 2px solid rgba(200, 100, 255, 0.2);
+    position: relative;
+}
+
+/* subtle glow strip at the top edge */
+.gifts-bottom-half::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(220, 100, 255, 0.6), rgba(255, 120, 180, 0.6), transparent);
+    box-shadow: 0 0 18px 4px rgba(200, 80, 255, 0.25);
+}
+
+.gifts-bottom-inner {
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    justify-content: center;
+}
+
+/* Header row styles (now in gifts-header-zone, not bottom half) */
+.gifts-header {
+    display: none;
+}
+
+.gifts-title {
+    font-size: 1.25rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #f9a8d4, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gifts-subtitle {
+    font-size: 0.82rem;
+    color: rgba(200, 170, 220, 0.65);
+    font-style: italic;
+}
+
+/* 8-column compact grid */
+.gifts-grid-compact {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Individual gift card — glassmorphism + rose-purple palette */
+.gift-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 10px 6px;
+    border-radius: 14px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(200, 100, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.gift-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(249, 168, 212, 0.07), rgba(192, 132, 252, 0.05));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.gift-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(249, 168, 212, 0.55);
+    box-shadow: 0 8px 24px rgba(192, 132, 252, 0.25), 0 0 0 1px rgba(249, 168, 212, 0.2);
+}
+
+.gift-card:hover::before {
+    opacity: 1;
+}
+
+.gift-card.selected {
+    background: rgba(192, 132, 252, 0.18);
+    border-color: #f472b6;
+    box-shadow: 0 0 20px rgba(244, 114, 182, 0.4), inset 0 0 12px rgba(192, 132, 252, 0.15);
+    transform: translateY(-2px);
+}
+
+.gift-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.gift-name {
+    font-size: 0.7rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: #e9d5ff;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.gift-price {
+    font-size: 0.65rem;
+    color: #f9a8d4;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.gift-card.selected .gift-price {
+    color: #f472b6;
+    text-shadow: 0 0 8px rgba(244, 114, 182, 0.6);
+}
+
+/* Submit button — gradient pill */
+.gifts-submit-btn {
+    margin-top: 2px;
+    padding: 10px 36px;
+    font-size: 0.92rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #c084fc, #f472b6, #fb923c);
+    color: white;
+    box-shadow: 0 4px 20px rgba(192, 132, 252, 0.45);
+    transition: all 0.2s ease;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.gifts-submit-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 28px rgba(244, 114, 182, 0.55);
+}
+
+.gifts-submit-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+
+
+
+
 .gift-item {
-    background: white;
-    border: 3px solid var(--border-color);
+    background: #1e1e30;
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 1.1rem;
     box-shadow: 4px 4px 0px var(--shadow-color);
-    color: black;
+    color: var(--text-main);
 }
 
 .gift-item span {
@@ -436,14 +704,16 @@ h3 {
 
 .gift-item:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--shadow-color);
-    background: #fdfdfd;
+    box-shadow: 6px 6px 0px rgba(77,150,255,0.3);
+    border-color: var(--accent-blue);
+    background: #252540;
 }
 
 .gift-item.selected {
-    background: var(--accent-yellow);
+    background: #2a1f10;
     border-color: var(--accent-pink);
-    box-shadow: inset 0 0 0 3px var(--accent-pink), 4px 4px 0px var(--shadow-color);
+    box-shadow: inset 0 0 0 2px var(--accent-pink), 4px 4px 0px var(--shadow-color);
+    color: var(--accent-yellow);
 }
 
 /* Overlay / Modal */
@@ -453,7 +723,8 @@ h3 {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -461,13 +732,13 @@ h3 {
 }
 
 .gift-modal {
-    background: white;
+    background: var(--bg-panel);
     padding: 40px;
     border-radius: 20px;
     text-align: center;
     max-width: 500px;
     box-shadow: 15px 15px 0px var(--shadow-color);
-    border: 5px solid var(--border-color);
+    border: 3px solid var(--border-color);
     animation: fadeInPage 0.3s ease;
 }
 
@@ -527,8 +798,8 @@ h3 {
     top: 0;
     width: 40px;
     height: 40px;
-    background: white;
-    border: 3px solid var(--border-color);
+    background: #22223a;
+    border: 2px solid var(--border-color);
     box-shadow: 3px 3px 0px var(--shadow-color);
     border-radius: 50%;
     display: flex;
@@ -539,11 +810,12 @@ h3 {
 }
 
 .timeline-content {
-    background: white;
-    border: 3px solid var(--border-color);
+    background: #1e1e2e;
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 20px;
     box-shadow: 6px 6px 0px var(--shadow-color);
+    color: var(--text-main);
 }
 
 .timeline-content h3 {
@@ -580,8 +852,8 @@ h3 {
 }
 
 .game-card {
-    background: white;
-    border: 3px solid var(--border-color);
+    background: var(--bg-panel);
+    border: 2px solid var(--border-color);
     border-radius: 16px;
     padding: 25px;
     box-shadow: 6px 6px 0px var(--shadow-color);
@@ -591,7 +863,7 @@ h3 {
 .game-card h3 {
     font-size: 1.8rem;
     color: var(--accent-blue);
-    text-shadow: 2px 2px 0px black;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     margin-bottom: 10px;
 }
 
@@ -602,7 +874,7 @@ h3 {
 .game-area {
     width: 100%;
     height: 250px;
-    background: var(--bg-main);
+    background: #0f0f1a;
     border: 3px dashed var(--accent-blue);
     border-radius: 12px;
     position: relative;
