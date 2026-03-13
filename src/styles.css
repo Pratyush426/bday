@@ -1642,3 +1642,24 @@ h3 {
         filter: blur(40px);
     }
 }
+
+/* ============================================
+   GIF FOOTER — Live Dancing Characters
+   ============================================ */
+.gifts-dancing-footer {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.live-dancer {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(0 0 5px rgba(255, 107, 139, 0.5));
+}
+

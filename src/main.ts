@@ -21,7 +21,7 @@ const STATE: State = {
 // --- AUDIO MANAGER ---
 const AUDIO_TRACKS: Record<string, string> = {
     'page-hero': '/audios/khat_ZS2Cw9qh.mp3',
-    'page-gifts': '',
+    'page-gifts': '/audios/anarkali-disco-chali-koshalworldcom_t3TgPcS6.mp3',
     'page-timeline': '',
     'page-video': '',
     'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
