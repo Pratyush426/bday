@@ -20,7 +20,7 @@ const STATE: State = {
 
 // --- AUDIO MANAGER ---
 const AUDIO_TRACKS: Record<string, string> = {
-    'page-hero': '/6th Main Road 7.m4a.mp4',
+    'page-hero': '/audios/khat_ZS2Cw9qh.mp3',
     'page-gifts': '',
     'page-timeline': '',
     'page-video': '',
@@ -37,6 +37,7 @@ const enterBtn = document.getElementById('enter-btn');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+    setupUnveilOverlay();
     setupNavigation();
     setupAudio();
     setupEasterEggs();
@@ -46,6 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTimelineObserver();
     setupMinigames();
 });
+
+// --- UNVEIL OVERLAY LOGIC ---
+function setupUnveilOverlay() {
+    const overlay = document.getElementById('unveil-overlay');
+    const unveilBtn = document.getElementById('unveil-btn');
+
+    if (overlay && unveilBtn) {
+        unveilBtn.addEventListener('click', () => {
+            overlay.classList.add('unveiled');
+            playTrackForPage('page-hero');
+            
+            // Remove from DOM after animation
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1500);
+        });
+    }
+}
 
 // --- AUDIO LOGIC ---
 function setupAudio() {
@@ -60,13 +79,7 @@ function setupAudio() {
     }
 
     // Modern browsers block autoplay without interaction.
-    // Start playing the hero track on the first click anywhere.
-    document.addEventListener('click', function initAudio() {
-        if (STATE.currentPage === 'page-hero' && !currentAudioContext) {
-            playTrackForPage('page-hero');
-        }
-        document.removeEventListener('click', initAudio);
-    }, { once: true });
+    // The "unveil" ribbon handles the first interaction.
 }
 
 function playTrackForPage(pageId: string) {
