@@ -38,11 +38,9 @@
             <div class="hero-content text-center" style="position: relative; z-index: 10;">
                 <div class="fade-away-wrapper">
                     <h1 class="bounce-text gradient-text"
-                        style="font-size: 5rem; line-height: 1.1; text-shadow: 4px 4px 0px var(--shadow-color);">
+                        style="font-family: 'Liquid Galaxy', sans-serif; font-size: 8rem; line-height: 1.1; text-shadow: 4px 4px 0px var(--shadow-color); font-weight: normal;">
                         HAPPY<br>BIRTHDAY<br>RIDHI! 🎉</h1>
                 </div>
-                <!-- We removed the subtitle since the hero text is floating away anyway 
-                     and we want it clean in the center. But let's keep it if she wants. -->
                 <p class="subtitle mt-3 font-bold fade-away-wrapper"
                     style="color: black; font-size: 1.5rem; text-shadow: 2px 2px 0px white; margin-bottom: 2rem;">
                     Welcome to the most
@@ -256,11 +254,10 @@
                 <p class="subtitle mt-2">A cinematic masterpiece nobody asked for.</p>
 
                 <div class="video-container mt-4">
-                    <!-- Placeholder using an iframe block. The user can swap src later -->
-                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);"></iframe>
+                    <video width="100%" controls style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                        <source src="/6th Main Road 7.m4a.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
 
                 <div class="roast-section mt-4 pt-3">
@@ -276,26 +273,89 @@
         </section>
 
         <!-- Page 5.5: Minigames / Not yet brother -->
-        <section id="page-games" class="page hidden text-center"
-            style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh;">
+        <section id="page-games" class="page hidden">
             <!-- Back Button -->
-            <button class="back-btn quirky-btn" data-target="page-video" style="align-self: flex-start; margin: 20px 0 0 20px;">← Back</button>
-            <h1 class="bounce-text gradient-text mb-4"
-                style="font-size: 5rem; text-shadow: 4px 4px 0px var(--shadow-color);">Not yet brother 😈</h1>
-            <p class="subtitle mb-4 subtitle-games"
-                style="font-size: 1.5rem; max-width: 600px;">
-                You thought you could escape without playing some chaotic minigames? Prove your worth.
-            </p>
+            <button class="back-btn quirky-btn games-back-btn" data-target="page-video">← Back</button>
 
-            <!-- Games will be injected here later -->
-            <div id="minigames-container" style="margin: 2rem 0;">
-                <p style="font-size: 1.2rem; font-style: italic; color: var(--text-muted);">(Minigames arriving soon!)
-                </p>
+            <!-- ABOVE THE FOLD: background + portrait centred -->
+            <div class="games-above-fold">
+                <div class="games-bg-layer"></div>
+
+                <!-- Floating text doodles -->
+                <div class="css-doodle-wrapper">
+                    <css-doodle>
+                        <style>
+                          @grid: 5x1 / 100% 100vh / transparent;
+                          @content: "Not yet\A brother";
+                          white-space: pre-wrap;
+                          text-align: center;
+                          @place: center;
+                          @size: 100% 0;
+                          color: @pn(#fff8ec, #feb944, #fe6842, #df5584, #5a5ca8);
+                          z-index: @I(-@i);
+                          font-family: 'Disco 70s', sans-serif;
+                          font-weight: bold;
+                          font-size: 5vw;
+                          line-height: 1.2;
+                          -webkit-text-stroke: 2px #2f2f2f;
+                          text-stroke: 2px #2f2f2f;
+                          transition: @i(*.05s);
+                          scale: calc(1 - .05 * @i);
+                          rotate: calc(8deg/@uw*(@ux - @uw/2) * @dx(-2));
+                          translate: 0 calc(2vh/@uh*(@uy - @uh/2) * @dx(-2));
+                        </style>
+                    </css-doodle>
+                </div>
+
+                <!-- Funky SVG Doodles -->
+                <svg class="funky-doodle doodle-star-1" viewBox="0 0 100 100" fill="none" stroke="var(--accent-pink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="rgba(255,100,200,0.2)"/>
+                </svg>
+                <svg class="funky-doodle doodle-swirl-1" viewBox="0 0 100 100" fill="none" stroke="var(--accent-blue)" stroke-width="5" stroke-linecap="round">
+                    <path d="M10 50 Q 30 10 50 50 T 90 50 M 50 20 L 60 5 L 75 15 M 50 80 L 40 95 L 25 85" />
+                </svg>
+                <svg class="funky-doodle doodle-star-2" viewBox="0 0 100 100" fill="none" stroke="var(--accent-yellow)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M50 10 L65 35 L95 40 L75 60 L80 90 L50 75 L20 90 L25 60 L5 40 L35 35 Z" fill="rgba(250,200,50,0.2)"/>
+                </svg>
+                <svg class="funky-doodle doodle-squiggly" viewBox="0 0 200 50" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round">
+                    <path d="M10 25 Q 25 5 40 25 T 70 25 T 100 25 T 130 25 T 160 25 T 190 25" style="opacity: 0.5" />
+                </svg>
+
+                <!-- Orbit Images container -->
+                <div id="orbit-container-games"></div>
+
+                <!-- Portrait -->
+                <div class="games-portrait-wrapper">
+                    <div class="glare-container">
+                        <img src="/WhatsApp_Image_2026-03-13_at_1.56.34_PM-removebg-preview.png"
+                             alt="Ridhi"
+                             class="games-portrait-img" />
+                        <div class="glare-effect"></div>
+                    </div>
+                </div>
+
+                <!-- Scroll hint -->
+                <div class="games-scroll-hint">scroll down ↓</div>
             </div>
 
-            <button class="quirky-btn primary mt-5 next-page-btn" data-target="page-end" style="font-size: 1.5rem;">
-                Okay NOW you can proceed to the end ➡️
-            </button>
+            <!-- BELOW THE FOLD: text + content -->
+            <div class="games-below-fold text-center">
+                <h1 class="bounce-text gradient-text mb-4"
+                    style="font-family: 'Liquid Galaxy', sans-serif; font-size: 5rem; text-shadow: 4px 4px 0px var(--shadow-color); font-weight: normal;">Not yet brother 😈</h1>
+                <p class="subtitle mb-4 subtitle-games"
+                    style="font-size: 1.5rem; max-width: 600px;">
+                    You thought you could escape without playing some chaotic minigames? Prove your worth.
+                </p>
+
+                <!-- Games will be injected here later -->
+                <div id="minigames-container" style="margin: 2rem 0;">
+                    <p style="font-size: 1.2rem; font-style: italic; color: var(--text-muted);">(Minigames arriving soon!)</p>
+                </div>
+
+                <button class="quirky-btn primary mt-5 next-page-btn" data-target="page-end" style="font-size: 1.5rem;">
+                    Okay NOW you can proceed to the end ➡️
+                </button>
+            </div>
         </section>
 
         <!-- Page 6: Final Page -->

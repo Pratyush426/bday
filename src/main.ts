@@ -1,6 +1,7 @@
 import './styles.css';
 import confetti from 'canvas-confetti';
 import { CircularGalleryApp, type CircularGalleryOptions } from './CircularGallery';
+import { createOrbitImages } from './OrbitImages';
 
 // --- STATE ---
 interface State {
@@ -131,6 +132,29 @@ function navigateTo(pageId: string) {
         items.forEach((item, index) => {
             setTimeout(() => item.classList.add('visible'), 300 + index * 600);
         });
+    }
+
+    // Init OrbitImages when entering the games page
+    if (pageId === 'page-games') {
+        const orbitContainer = document.getElementById('orbit-container-games');
+        if (orbitContainer && !orbitContainer.hasChildNodes()) {
+            createOrbitImages(orbitContainer, {
+                images: [
+                    "/111.jpeg",
+                    "/112.jpeg",
+                    "/113.jpeg",
+                    "/114.jpeg"
+                ],
+                shape: "ellipse",
+                radiusX: 340,
+                radiusY: 80,
+                rotation: -8,
+                duration: 30,
+                itemSize: 80,
+                fill: true,
+                showPath: true
+            });
+        }
     }
 }
 
