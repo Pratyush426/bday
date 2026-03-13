@@ -70,10 +70,8 @@
                 <p class="gifts-subtitle">Pick whatever you want. (Bro will cry later.)</p>
             </div>
 
-            <!-- Zone 2: Full-width image -->
-            <div class="gifts-top-half">
-                <img src="/Untitled design.png" alt="Birthday Gift Banner" class="gifts-hero-img" />
-            </div>
+            <!-- Zone 2: Circular Gallery -->
+            <div class="gifts-top-half" id="circular-gallery-container"></div>
 
             <!-- Zone 3: Gift grid -->
             <div class="gifts-bottom-half">
@@ -125,54 +123,127 @@
             </div>
         </section>
 
-        <!-- Page 4: Timeline -->
+        <!-- Page 4: Timeline — Circuit Board Edition -->
         <section id="page-timeline" class="page hidden">
-            <!-- Back Button -->
             <button class="back-btn quirky-btn" data-target="page-gifts">← Back</button>
-            <div class="quirky-panel text-center" style="max-width: 900px; padding: 20px;">
-                <h2 class="bounce-text">The Ridhi Cinematic Universe 🧬</h2>
-                <p class="subtitle mt-2 mb-4">A documented history of chaos.</p>
 
-                <div class="timeline mt-4 text-left">
-                    <div class="timeline-item">
-                        <div class="timeline-icon">👶</div>
-                        <div class="timeline-content">
-                            <h3>Childhood Chaos</h3>
-                            <p>Here we see Ridhi discovering the ancient art of destruction. Toys were harmed.</p>
+            <div class="circuit-page-inner">
+                <h2 class="circuit-section-title">&lt; THE RIDHI CINEMATIC UNIVERSE /&gt;</h2>
+                <p class="circuit-subtitle">A documented history of chaos.</p>
+
+                <div class="circuit-container" id="circuit-container">
+                    <div class="central-bus"></div>
+
+                    <div class="circuit-item left" data-id="RCU_001">
+                        <div class="connection-line"></div>
+                        <div class="circuit-node"></div>
+                        <div class="microchip-card">
+                            <div class="chip-header">
+                                <span class="chip-id">RCU_001</span>
+                                <span class="chip-rank gold">👶 ORIGIN</span>
+                            </div>
+                            <div class="chip-body">
+                                <h3 class="event-name">Childhood Chaos</h3>
+                                <div class="event-meta">
+                                    <span class="evt-date">[Year 0 – 10]</span>
+                                    <span class="evt-loc">@ Home Base</span>
+                                </div>
+                                <p class="evt-desc">&gt; Ridhi discovers the ancient art of destruction. Toys were harmed. No regrets.</p>
+                            </div>
+                            <div class="chip-pins top"></div>
+                            <div class="chip-pins bottom"></div>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">🎒</div>
-                        <div class="timeline-content">
-                            <h3>School Days</h3>
-                            <p>Homework was eaten (allegedly by the dog), drama was created, grades were... decent.</p>
+
+                    <div class="circuit-item right" data-id="RCU_002">
+                        <div class="connection-line"></div>
+                        <div class="circuit-node"></div>
+                        <div class="microchip-card">
+                            <div class="chip-header">
+                                <span class="chip-id">RCU_002</span>
+                                <span class="chip-rank blue">🎒 ERA</span>
+                            </div>
+                            <div class="chip-body">
+                                <h3 class="event-name">School Days</h3>
+                                <div class="event-meta">
+                                    <span class="evt-date">[Year 10 – 18]</span>
+                                    <span class="evt-loc">@ The Institution</span>
+                                </div>
+                                <p class="evt-desc">&gt; Homework allegedly eaten by dog. Drama manufactured daily. Grades were… decent.</p>
+                            </div>
+                            <div class="chip-pins top"></div>
+                            <div class="chip-pins bottom"></div>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">🎓</div>
-                        <div class="timeline-content">
-                            <h3>College Era</h3>
-                            <p>Surviving entirely on instant noodles and last-minute panic studying.</p>
+
+                    <div class="circuit-item left" data-id="RCU_003">
+                        <div class="connection-line"></div>
+                        <div class="circuit-node"></div>
+                        <div class="microchip-card">
+                            <div class="chip-header">
+                                <span class="chip-id">RCU_003</span>
+                                <span class="chip-rank blue">🎓 LEVEL UP</span>
+                            </div>
+                            <div class="chip-body">
+                                <h3 class="event-name">College Era</h3>
+                                <div class="event-meta">
+                                    <span class="evt-date">[Year 18 – Now]</span>
+                                    <span class="evt-loc">@ Chaos University</span>
+                                </div>
+                                <p class="evt-desc">&gt; Running on instant noodles and last-minute panic studying. Peak performance.</p>
+                            </div>
+                            <div class="chip-pins top"></div>
+                            <div class="chip-pins bottom"></div>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">🧨</div>
-                        <div class="timeline-content">
-                            <h3>New Year's Eve Adventures</h3>
-                            <p>Peak chaotic energy unleashed. Fireworks weren't the only things exploding.</p>
+
+                    <div class="circuit-item right" data-id="RCU_004">
+                        <div class="connection-line"></div>
+                        <div class="circuit-node"></div>
+                        <div class="microchip-card">
+                            <div class="chip-header">
+                                <span class="chip-id">RCU_004</span>
+                                <span class="chip-rank gold">🧨 EVENT</span>
+                            </div>
+                            <div class="chip-body">
+                                <h3 class="event-name">New Year's Eve Adventures</h3>
+                                <div class="event-meta">
+                                    <span class="evt-date">[Annual]</span>
+                                    <span class="evt-loc">@ Classified Location</span>
+                                </div>
+                                <p class="evt-desc">&gt; Peak chaotic energy unleashed. Fireworks weren't the only things exploding.</p>
+                            </div>
+                            <div class="chip-pins top"></div>
+                            <div class="chip-pins bottom"></div>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">🎂</div>
-                        <div class="timeline-content">
-                            <h3>Present Day</h3>
-                            <p>Becoming older but definitely not wiser. The chaos continues.</p>
+
+                    <div class="circuit-item left" data-id="RCU_005">
+                        <div class="connection-line"></div>
+                        <div class="circuit-node"></div>
+                        <div class="microchip-card">
+                            <div class="chip-header">
+                                <span class="chip-id">RCU_005</span>
+                                <span class="chip-rank gold">🎂 PRESENT</span>
+                            </div>
+                            <div class="chip-body">
+                                <h3 class="event-name">Present Day</h3>
+                                <div class="event-meta">
+                                    <span class="evt-date">[2026]</span>
+                                    <span class="evt-loc">@ Right Here</span>
+                                </div>
+                                <p class="evt-desc">&gt; Becoming older but definitely not wiser. The chaos continues. Happy Birthday! 🎉</p>
+                            </div>
+                            <div class="chip-pins top"></div>
+                            <div class="chip-pins bottom"></div>
                         </div>
                     </div>
                 </div>
 
-                <button class="quirky-btn primary mt-4 next-page-btn" data-target="page-video">Show me the evidence
-                    ➡️</button>
+                <button class="quirky-btn primary next-page-btn" data-target="page-video"
+                    style="margin: 2rem auto; display: block; width: fit-content;">
+                    Show me the evidence ➡️
+                </button>
             </div>
         </section>
 

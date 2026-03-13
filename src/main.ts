@@ -1,5 +1,6 @@
 import './styles.css';
 import confetti from 'canvas-confetti';
+import { CircularGalleryApp, type CircularGalleryOptions } from './CircularGallery';
 
 // --- STATE ---
 interface State {
@@ -27,6 +28,7 @@ const AUDIO_TRACKS: Record<string, string> = {
 };
 
 let currentAudioContext: HTMLAudioElement | null = null;
+let circularGalleryInstance: CircularGalleryApp | null = null;
 
 // --- DOM ELEMENTS ---
 const muteBtn = document.getElementById('mute-toggle') as HTMLButtonElement | null;
@@ -87,6 +89,12 @@ function navigateTo(pageId: string) {
         p.classList.remove('active');
     });
 
+    // Destroy gallery when leaving gifts page
+    if (STATE.currentPage === 'page-gifts' && pageId !== 'page-gifts' && circularGalleryInstance) {
+        circularGalleryInstance.destroy();
+        circularGalleryInstance = null;
+    }
+
     const target = document.getElementById(pageId);
     if (target) {
         target.classList.remove('hidden');
@@ -94,6 +102,35 @@ function navigateTo(pageId: string) {
         STATE.currentPage = pageId;
         playTrackForPage(pageId);
         window.scrollTo(0, 0);
+    }
+
+    // Init gallery when entering gifts page
+    if (pageId === 'page-gifts' && !circularGalleryInstance) {
+        const galleryContainer = document.getElementById('circular-gallery-container');
+        if (galleryContainer) {
+            // Use requestAnimationFrame to ensure DOM is painted/sized first
+            requestAnimationFrame(() => {
+                const opts: CircularGalleryOptions = {
+                    bend: 1,
+                    textColor: '#ffffff',
+                    borderRadius: 0.05,
+                    scrollSpeed: 2,
+                    scrollEase: 0.05,
+                };
+                circularGalleryInstance = new CircularGalleryApp(galleryContainer, opts);
+            });
+        }
+    }
+
+    // Stagger circuit items in when entering the timeline page
+    if (pageId === 'page-timeline') {
+        const items = Array.from(document.querySelectorAll('.circuit-item'));
+        // Reset first
+        items.forEach(item => item.classList.remove('visible'));
+        // Stagger in
+        items.forEach((item, index) => {
+            setTimeout(() => item.classList.add('visible'), 300 + index * 600);
+        });
     }
 }
 
@@ -238,19 +275,29 @@ function setupRandomRoast() {
     });
 }
 
-// --- TIMELINE OBSERVER ---
+// --- CIRCUIT TIMELINE OBSERVER ---
 function setupTimelineObserver() {
+    const items = Array.from(document.querySelectorAll('.circuit-item'));
+    if (!items.length) return;
+
+    let triggered = false;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+            if (entry.isIntersecting && !triggered) {
+                triggered = true;
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 600);
+                });
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
 
-    document.querySelectorAll('.timeline-item').forEach(item => {
-        observer.observe(item);
-    });
+    // Observe the container so it fires when any part of the list is in view
+    const container = document.getElementById('circuit-container');
+    if (container) observer.observe(container);
 }
 
 // --- EASTER EGGS ---
