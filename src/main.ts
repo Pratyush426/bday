@@ -24,7 +24,7 @@ const AUDIO_TRACKS: Record<string, string> = {
     'page-gifts': '',
     'page-timeline': '',
     'page-video': '',
-    'page-games': '',
+    'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
     'page-end': ''
 };
 
@@ -149,6 +149,16 @@ function navigateTo(pageId: string) {
 
     // Init OrbitImages when entering the games page
     if (pageId === 'page-games') {
+        const shockOverlay = document.getElementById('games-shock-overlay');
+        if (shockOverlay) {
+            shockOverlay.classList.remove('hidden');
+            shockOverlay.classList.add('active');
+            setTimeout(() => {
+                shockOverlay.classList.add('hidden');
+                shockOverlay.classList.remove('active');
+            }, 3000);
+        }
+
         const orbitContainer = document.getElementById('orbit-container-games');
         if (orbitContainer && !orbitContainer.hasChildNodes()) {
             createOrbitImages(orbitContainer, {

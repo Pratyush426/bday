@@ -1589,3 +1589,56 @@ h3 {
     background: transparent;
     transition: background 1s ease;
 }
+
+/* ============================================
+   SHOCK EFFECT OVERLAY
+   ============================================ */
+.shock-overlay {
+    position: absolute;
+    inset: 0;
+    background: #0e0e14;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.shock-text {
+    font-family: 'Liquid Galaxy', sans-serif;
+    font-size: clamp(3rem, 15vw, 8rem);
+    color: var(--accent-pink);
+    text-shadow: 0 0 30px rgba(255, 107, 139, 0.6);
+    text-align: center;
+    line-height: 1.2;
+    opacity: 0;
+    white-space: nowrap;
+}
+
+.shock-overlay.active .shock-text {
+    animation: thinAir 2.5s ease-in-out forwards;
+}
+
+@keyframes thinAir {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+        filter: blur(10px);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: blur(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(3.5);
+        filter: blur(40px);
+    }
+}
