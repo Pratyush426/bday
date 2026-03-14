@@ -29,7 +29,37 @@ const DEFAULT_IMAGES = [
   { src: '/28.jpeg', alt: 'Image 28' },
   { src: '/29.jpeg', alt: 'Image 29' },
   { src: '/30.jpeg', alt: 'Image 30' },
-  { src: '/31.jpeg', alt: 'Image 31' }
+  { src: '/31.jpeg', alt: 'Image 31' },
+  { src: '/32.jpeg', alt: 'Image 32' },
+  { src: '/33.jpeg', alt: 'Image 33' },
+  { src: '/34.jpeg', alt: 'Image 34' },
+  { src: '/35.jpeg', alt: 'Image 35' },
+  { src: '/36.jpeg', alt: 'Image 36' },
+  { src: '/37.jpeg', alt: 'Image 37' },
+  { src: '/38.jpeg', alt: 'Image 38' },
+  { src: '/39.jpeg', alt: 'Image 39' },
+  { src: '/40.jpeg', alt: 'Image 40' },
+  { src: '/41.jpeg', alt: 'Image 41' },
+  { src: '/42.jpeg', alt: 'Image 42' },
+  { src: '/43.jpeg', alt: 'Image 43' },
+  { src: '/44.jpeg', alt: 'Image 44' },
+  { src: '/45.jpeg', alt: 'Image 45' },
+  { src: '/46.jpeg', alt: 'Image 46' },
+  { src: '/47.jpeg', alt: 'Image 47' },
+  { src: '/48.jpeg', alt: 'Image 48' },
+  { src: '/49.jpeg', alt: 'Image 49' },
+  { src: '/50.jpeg', alt: 'Image 50' },
+  { src: '/51.jpeg', alt: 'Image 51' },
+  { src: '/52.jpeg', alt: 'Image 52' },
+  { src: '/53.jpeg', alt: 'Image 53' },
+  { src: '/54.jpeg', alt: 'Image 54' },
+  { src: '/55.jpeg', alt: 'Image 55' },
+  { src: '/56.jpeg', alt: 'Image 56' },
+  { src: '/57.jpeg', alt: 'Image 57' },
+  { src: '/58.jpeg', alt: 'Image 58' },
+  { src: '/59.jpeg', alt: 'Image 59' },
+  { src: '/60.jpeg', alt: 'Image 60' },
+  { src: '/61.jpeg', alt: 'Image 61' }
 ];
 
 const DEFAULTS = {
@@ -368,6 +398,28 @@ export function initDomeGallery(
   applyTransform(0, 0);
 
   return {
+    spin: (durationMs: number = 2000, revolutions: number = 1) => {
+      const startY = rotationRef.current.y;
+      const startTime = performance.now();
+
+      const animateSpin = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / durationMs, 1);
+        
+        // Use an easing function for smooth start/stop
+        const easeInOut = (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        const currentY = startY + (360 * revolutions * easeInOut(progress));
+        
+        rotationRef.current.y = wrapAngleSigned(currentY);
+        applyTransform(rotationRef.current.x, rotationRef.current.y);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateSpin);
+        }
+      };
+
+      requestAnimationFrame(animateSpin);
+    },
     destroy: () => {
       ro.disconnect();
       document.removeEventListener('pointermove', handlePointerMove);

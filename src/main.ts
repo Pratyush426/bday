@@ -24,6 +24,7 @@ const STATE: State = {
 const AUDIO_TRACKS: Record<string, string> = {
     'page-hero': '/audios/khat_ZS2Cw9qh.mp3',
     'page-gifts': '/audios/anarkali-disco-chali-koshalworldcom_t3TgPcS6.mp3',
+    'page-dome-gallery': '/audios/tum-ho-toh-saiyaara-128-kbps_JSx36EGS.mp3',
     'page-timeline': '',
     'page-video': '',
     'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
@@ -187,6 +188,24 @@ function navigateTo(pageId: string) {
 
     // Init DomeGallery when entering the dome gallery page
     if (pageId === 'page-dome-gallery') {
+        const welcomeOverlay = document.getElementById('dome-welcome-overlay');
+        const lessGoBtn = document.getElementById('dome-less-go-btn');
+        
+        if (welcomeOverlay && lessGoBtn) {
+            welcomeOverlay.classList.remove('hidden');
+            welcomeOverlay.classList.remove('vanish');
+            
+            lessGoBtn.onclick = () => {
+                welcomeOverlay.classList.add('vanish');
+                setTimeout(() => {
+                    welcomeOverlay.classList.add('hidden');
+                    if (domeGalleryInstance) {
+                        domeGalleryInstance.spin(2500, 3); // 2.5s for 3 rapid revolutions
+                    }
+                }, 800); // Wait for vanish animation
+            };
+        }
+
         if (!domeGalleryInstance) {
             const domeContainer = document.getElementById('dome-gallery-root');
             if (domeContainer) {
