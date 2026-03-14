@@ -1,7 +1,10 @@
 import './styles.css';
+import './DomeGallery.css';
 import confetti from 'canvas-confetti';
-import { CircularGalleryApp, type CircularGalleryOptions } from './CircularGallery';
 import { createOrbitImages } from './OrbitImages';
+import { HorizontalMotion } from './HorizontalMotion';
+import { PyroEffect } from './PyroEffect';
+import { initDomeGallery } from './DomeGallery';
 
 // --- STATE ---
 interface State {
@@ -28,8 +31,27 @@ const AUDIO_TRACKS: Record<string, string> = {
     'page-end': ''
 };
 
+const pyro = new PyroEffect();
+
 let currentAudioContext: HTMLAudioElement | null = null;
-let circularGalleryInstance: CircularGalleryApp | null = null;
+let gifMotionInstance: HorizontalMotion | null = null;
+let textTickerInstance: HorizontalMotion | null = null;
+let domeGalleryInstance: any = null;
+
+const GIFT_GIFS = [
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemwzMGw2cXRvOXBvYnQxMnE1NWNuNXZsYmcxbW1hanVreWI3bjB5aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XN8YOV0H6YfVFFGxth/giphy.gif",
+    "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDZ4MG4yMHFua3JsbmdsdHc4azQzdGxnaGwxaGs5NW8xMGphc2gyciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wVmt9Gh02y6u0FAd6J/giphy.gif",
+    "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDBzZW4zeThubzdiMHRmMmNvN3kyMHlmem1ycTNuamhwd3d1ZHAzeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/knLRouBQlkniWmx0hp/giphy.gif",
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmI5MDB1N3BidW5ndTh0a2c2a2t6czFxM29yc3FldWJsb3YydzBkeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/66CRyMw8X9bhQFs8Je/giphy.gif",
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTNxd3V4czE5cHZ6dXBzYnpnZXoyOGhndW42ODRyYXI0dmUzazU3dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aosOPhpJHrJq8/giphy.gif",
+    "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTB2anA2OWMweG9wMDlmY2oxNGl6cW44MWxjYjJwd3VtMGZkdm1yYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7qE2VAxuXWeyvJIY/giphy.gif",
+    "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTVrdTJtOWhqYXRhMDE1OHljcm92eW9sa2trOWRxNGZzc3NjMHEyaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Eyepo7itqjQcVc82Nf/giphy.gif",
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDNzdmc5czliZTZ0ZzhuM2d1YzEybWhocTZlbHNnM2g0ZGk4aTJsYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WmkqburJqXziM/giphy.gif",
+    "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYW50djM4YnNjOHM2NHpkNW12MnozNmxvaHpwdThpY3pvaGloOXFhNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/j93ycvEyWlSIIg8AEl/giphy.gif",
+    "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3hkbGZ1Z3VqZXlrODA0aHQ0YW4xZGthMXpwMGV4c2E5OWNlNW4xZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nU0EccnuhJa5ofFr6v/giphy.gif",
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzZ5bGV0dnl4dWxwaGhyZDhmdXZoYTZka2cyazZpb3A4YnV0eG10cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13JipyoTNNvM2c/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OHQxa2k1cGh0NnlncHRlc21mNHdxc3AxcTc4ejl3cmJicmR4OWkxNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ADuNzKRAV5s3Nemh84/giphy.gif"
+];
 
 // --- DOM ELEMENTS ---
 const muteBtn = document.getElementById('mute-toggle') as HTMLButtonElement | null;
@@ -103,10 +125,16 @@ function navigateTo(pageId: string) {
         p.classList.remove('active');
     });
 
-    // Destroy gallery when leaving gifts page
-    if (STATE.currentPage === 'page-gifts' && pageId !== 'page-gifts' && circularGalleryInstance) {
-        circularGalleryInstance.destroy();
-        circularGalleryInstance = null;
+    // Destroy gallery & ticker when leaving gifts page
+    if (STATE.currentPage === 'page-gifts' && pageId !== 'page-gifts') {
+        if (gifMotionInstance) {
+            gifMotionInstance.destroy();
+            gifMotionInstance = null;
+        }
+        if (textTickerInstance) {
+            textTickerInstance.destroy();
+            textTickerInstance = null;
+        }
     }
 
     const target = document.getElementById(pageId);
@@ -118,21 +146,64 @@ function navigateTo(pageId: string) {
         window.scrollTo(0, 0);
     }
 
-    // Init gallery when entering gifts page
-    if (pageId === 'page-gifts' && !circularGalleryInstance) {
-        const galleryContainer = document.getElementById('circular-gallery-container');
-        if (galleryContainer) {
-            // Use requestAnimationFrame to ensure DOM is painted/sized first
-            requestAnimationFrame(() => {
-                const opts: CircularGalleryOptions = {
-                    bend: 1,
-                    textColor: '#ffffff',
-                    borderRadius: 0.05,
-                    scrollSpeed: 2,
-                    scrollEase: 0.05,
-                };
-                circularGalleryInstance = new CircularGalleryApp(galleryContainer, opts);
-            });
+    // Init gallery & ticker when entering gifts page
+    if (pageId === 'page-gifts') {
+        
+        if (!gifMotionInstance) {
+            const galleryContainer = document.getElementById('circular-gallery-container');
+            const tickerContainer = document.getElementById('text-ticker-container');
+            
+            if (galleryContainer) {
+                requestAnimationFrame(() => {
+                    gifMotionInstance = new HorizontalMotion(galleryContainer, {
+                        items: GIFT_GIFS,
+                        type: 'image',
+                        itemWidth: 250,
+                        itemHeight: 250,
+                        gap: 50,
+                        speed: 2.0
+                    });
+                });
+            }
+            
+            if (tickerContainer) {
+                requestAnimationFrame(() => {
+                    textTickerInstance = new HorizontalMotion(tickerContainer, {
+                        items: [
+                            "behen ka bday 🎂", 
+                            "chudail 👻", 
+                            "haathi 🐘", 
+                            "chal nikal 🚀"
+                        ],
+                        type: 'text',
+                        itemWidth: 280,
+                        itemHeight: 40,
+                        gap: 80,
+                        speed: -1.2, 
+                        fontSize: '1.2rem',
+                        textColor: 'var(--accent-pink)'
+                    });
+                });
+            }
+        }
+    }
+
+    // Init DomeGallery when entering the dome gallery page
+    if (pageId === 'page-dome-gallery') {
+        if (!domeGalleryInstance) {
+            const domeContainer = document.getElementById('dome-gallery-root');
+            if (domeContainer) {
+                requestAnimationFrame(() => {
+                    domeGalleryInstance = initDomeGallery('#dome-gallery-root', {
+                        fit: 0.8,
+                        minRadius: 600,
+                        maxVerticalRotationDeg: 0,
+                        segments: 34,
+                        dragDampening: 2,
+                        grayscale: false
+                    });
+                });
+            }
         }
     }
 
@@ -291,7 +362,7 @@ function showGiftModal(total: number) {
     if (acceptBtn) {
         acceptBtn.addEventListener('click', () => {
             overlay.remove();
-            navigateTo('page-timeline');
+            navigateTo('page-dome-gallery');
         });
     }
 }
