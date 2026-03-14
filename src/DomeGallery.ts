@@ -1,4 +1,4 @@
-const DEFAULT_IMAGES = [
+export const DEFAULT_IMAGES = [
   { src: '/1.jpeg', alt: 'Image 1' },
   { src: '/2.jpeg', alt: 'Image 2' },
   { src: '/3.jpeg', alt: 'Image 3' },
@@ -126,7 +126,7 @@ function buildItems(pool: any[], seg: number) {
 }
 
 
-export function initDomeGallery(
+export async function initDomeGallery(
   containerSelector: string,
   options: any = {}
 ) {
@@ -183,6 +183,23 @@ export function initDomeGallery(
   };
 
   const items = buildItems(images, segments);
+
+  // Preload images
+  const preloadImages = (items: any[]) => {
+    const promises = items.map(item => {
+      if (!item.src) return Promise.resolve();
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve; // Continue even if some images fail
+        img.src = item.src;
+      });
+    });
+    return Promise.all(promises);
+  };
+
+  const imagesLoadedPromise = preloadImages(items);
+
 
   const applyTransform = (xDeg: number, yDeg: number) => {
     const el = sphereRef.current;
@@ -398,6 +415,7 @@ export function initDomeGallery(
   applyTransform(0, 0);
 
   return {
+    ready: imagesLoadedPromise,
     spin: (durationMs: number = 2000, revolutions: number = 1) => {
       const startY = rotationRef.current.y;
       const startTime = performance.now();

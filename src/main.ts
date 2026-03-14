@@ -117,7 +117,85 @@ function playTrackForPage(pageId: string) {
 }
 
 // --- NAVIGATION LOGIC ---
+// --- ASSET PRELOADING ---
+const PAGE_ASSETS: Record<string, string[]> = {
+    'page-hero': ['/hero-bg.png'],
+    'page-gifts': GIFT_GIFS,
+    'page-dome-gallery': [], 
+    'page-timeline': [], 
+    'page-video': ['/6th Main Road 7.m4a.mp4'],
+    'page-games': [
+        "/WhatsApp_Image_2026-03-13_at_1.56.34_PM-removebg-preview.png",
+        "/111.jpeg", "/112.jpeg", "/113.jpeg", "/114.jpeg"
+    ],
+    'page-end': []
+};
+
+// Also include dome images
+import { DEFAULT_IMAGES } from './DomeGallery';
+PAGE_ASSETS['page-dome-gallery'] = DEFAULT_IMAGES.map(img => img.src);
+
+const preloadedPages = new Set<string>();
+
+async function preloadPageAssets(pageId: string) {
+    if (preloadedPages.has(pageId)) return Promise.resolve();
+    
+    const assets = PAGE_ASSETS[pageId] || [];
+    if (assets.length === 0) {
+        preloadedPages.add(pageId);
+        return Promise.resolve();
+    }
+
+    const promises = assets.map(src => {
+        return new Promise((resolve) => {
+            if (src.endsWith('.mp4') || src.endsWith('.m4v') || src.endsWith('.m4a')) {
+                const video = document.createElement('video');
+                video.onloadedmetadata = resolve;
+                video.onerror = resolve; // Continue even if one fails
+                video.src = src;
+            } else {
+                const img = new Image();
+                img.onload = resolve;
+                img.onerror = resolve;
+                img.src = src;
+            }
+        });
+    });
+
+    await Promise.all(promises);
+    preloadedPages.add(pageId);
+    updateButtonStates();
+}
+
+function updateButtonStates() {
+    document.querySelectorAll('.next-page-btn').forEach(btn => {
+        // Skip specialized buttons or ones the user wants to stay active
+        if (btn.id === 'dome-gallery-next-btn') {
+            btn.classList.remove('loading');
+            (btn as HTMLButtonElement).disabled = false;
+            return;
+        }
+        
+        const dest = btn.getAttribute('data-target');
+        if (dest && preloadedPages.has(dest)) {
+            btn.classList.remove('loading');
+            (btn as HTMLButtonElement).disabled = false;
+        } else {
+            // Keep or set to loading
+            btn.classList.add('loading');
+            (btn as HTMLButtonElement).disabled = true;
+        }
+    });
+}
+
+// --- NAVIGATION LOGIC ---
 function navigateTo(pageId: string) {
+    if (!preloadedPages.has(pageId)) {
+        console.warn(`Attempted to navigate to ${pageId} but it's not ready.`);
+        // Note: we've disabled the buttons, so this shouldn't normally happen.
+        // But for completeness, we could wait here if needed.
+    }
+
     document.querySelectorAll('.page').forEach(p => {
         p.classList.add('hidden');
         p.classList.remove('active');
@@ -142,10 +220,21 @@ function navigateTo(pageId: string) {
         STATE.currentPage = pageId;
         playTrackForPage(pageId);
         window.scrollTo(0, 0);
+
+        // Proactively preload the next page after a small delay
+        const nextBtn = target.querySelector('.next-page-btn');
+        if (nextBtn) {
+            const nextDest = nextBtn.getAttribute('data-target');
+            if (nextDest) {
+                setTimeout(() => preloadPageAssets(nextDest), 500);
+            }
+        }
     }
 
     // Init gallery & ticker when entering gifts page
     if (pageId === 'page-gifts') {
+        // Proactively preload the dome gallery since it's the next step
+        preloadPageAssets('page-dome-gallery');
         
         if (!gifMotionInstance) {
             const galleryContainer = document.getElementById('circular-gallery-container');
@@ -189,12 +278,15 @@ function navigateTo(pageId: string) {
     // Init DomeGallery when entering the dome gallery page
     if (pageId === 'page-dome-gallery') {
         const welcomeOverlay = document.getElementById('dome-welcome-overlay');
-        const lessGoBtn = document.getElementById('dome-less-go-btn');
+        const lessGoBtn = document.getElementById('dome-less-go-btn') as HTMLButtonElement | null;
         
         if (welcomeOverlay && lessGoBtn) {
             welcomeOverlay.classList.remove('hidden');
             welcomeOverlay.classList.remove('vanish');
             
+            // Note: Dome preloading is now handled by the global system
+            // But we keep the specialized button logic for the "spin" behavior
+
             lessGoBtn.onclick = () => {
                 welcomeOverlay.classList.add('vanish');
                 setTimeout(() => {
@@ -209,8 +301,8 @@ function navigateTo(pageId: string) {
         if (!domeGalleryInstance) {
             const domeContainer = document.getElementById('dome-gallery-root');
             if (domeContainer) {
-                requestAnimationFrame(() => {
-                    domeGalleryInstance = initDomeGallery('#dome-gallery-root', {
+                requestAnimationFrame(async () => {
+                    domeGalleryInstance = await initDomeGallery('#dome-gallery-root', {
                         fit: 0.8,
                         minRadius: 600,
                         maxVerticalRotationDeg: 0,
@@ -218,6 +310,16 @@ function navigateTo(pageId: string) {
                         dragDampening: 2,
                         grayscale: false
                     });
+
+                    // Global system already preloaded these, but we ensure consistency
+                    if (domeGalleryInstance && domeGalleryInstance.ready) {
+                        await domeGalleryInstance.ready;
+                        if (lessGoBtn) {
+                            lessGoBtn.classList.remove('loading');
+                            lessGoBtn.disabled = false;
+                            lessGoBtn.innerHTML = 'Lesss go 💖';
+                        }
+                    }
                 });
             }
         }
@@ -269,11 +371,26 @@ function navigateTo(pageId: string) {
 }
 
 function setupNavigation() {
+    // Preload hero page assets immediately (it's already visible but good practice)
+    preloadPageAssets('page-hero');
+    // Also preload the first navigation target (gifts page)
+    preloadPageAssets('page-gifts');
+
     document.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
         if (target && (target.classList.contains('next-page-btn') || target.classList.contains('back-btn'))) {
             const dest = target.getAttribute('data-target');
-            if (dest) navigateTo(dest);
+            if (dest) {
+                // If it's a next button and not ready, don't navigate
+                // EXCEPT for the dome gallery next button which the user wants to keep active
+                if (target.classList.contains('next-page-btn') && 
+                    target.id !== 'dome-gallery-next-btn' && 
+                    !preloadedPages.has(dest)) {
+                    console.log(`Page ${dest} is NOT ready yet.`);
+                    return;
+                }
+                navigateTo(dest);
+            }
         }
     });
 
@@ -367,16 +484,20 @@ function showGiftModal(total: number) {
                 Therefore, you now owe your brother this amount.<br>
                 Please pay immediately or cancel your request.
             </div>
-            <button class="glass-btn primary mt-4" id="accept-debt-btn">I Accept My Debt ➡️</button>
+            <button class="glass-btn primary mt-4 next-page-btn" id="accept-debt-btn" data-target="page-dome-gallery">I Accept My Debt ➡️</button>
         </div>
     `;
 
     document.body.appendChild(overlay);
     if (typeof fireConfetti === 'function') fireConfetti();
 
+    // Trigger update for newly added modal button
+    updateButtonStates();
+
     const acceptBtn = document.getElementById('accept-debt-btn');
     if (acceptBtn) {
         acceptBtn.addEventListener('click', () => {
+            if (!preloadedPages.has('page-dome-gallery')) return;
             overlay.remove();
             navigateTo('page-dome-gallery');
         });
