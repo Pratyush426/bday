@@ -44,7 +44,6 @@ export class HorizontalMotion {
         this.container.style.whiteSpace = 'nowrap';
 
         // Duplicate for infinite scroll feel
-        const count = Math.ceil(this.container.clientWidth / (this.options.itemWidth! + this.options.gap!)) + 2;
         const fullList = [];
         for (let i = 0; i < 3; i++) fullList.push(...this.options.items);
         

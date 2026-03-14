@@ -40,16 +40,11 @@ const DEFAULTS = {
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
-const normalizeAngle = (d: number) => ((d % 360) + 360) % 360;
 const wrapAngleSigned = (deg: number) => {
   const a = (((deg + 180) % 360) + 360) % 360;
   return a - 180;
 };
-const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
-  const attr = el.dataset[name] ?? el.getAttribute(`data-${name}`);
-  const n = attr == null ? NaN : parseFloat(attr);
-  return Number.isFinite(n) ? n : fallback;
-};
+
 
 function buildItems(pool: any[], seg: number) {
   const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 2);
@@ -100,12 +95,6 @@ function buildItems(pool: any[], seg: number) {
   }));
 }
 
-function computeItemBaseRotation(offsetX: number, offsetY: number, sizeX: number, sizeY: number, segments: number) {
-  const unit = 360 / segments / 2;
-  const rotateY = unit * (offsetX + (sizeX - 1) / 2);
-  const rotateX = unit * (offsetY - (sizeY - 1) / 2);
-  return { rotateX, rotateY };
-}
 
 export function initDomeGallery(
   containerSelector: string,
@@ -123,9 +112,6 @@ export function initDomeGallery(
     dragSensitivity = DEFAULTS.dragSensitivity,
     enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
     segments = DEFAULTS.segments,
-    dragDampening = 2,
-    openedImageWidth = '250px',
-    openedImageHeight = '350px',
     imageBorderRadius = '30px',
     openedImageBorderRadius = '30px',
     grayscale = true
@@ -144,17 +130,14 @@ export function initDomeGallery(
   const viewerRef = { current: null as HTMLElement | null };
   const scrimRef = { current: null as HTMLElement | null };
   const focusedElRef = { current: null as HTMLElement | null };
-  const originalTilePositionRef = { current: null as any };
 
   const rotationRef = { current: { x: 0, y: 0 } };
   const startRotRef = { current: { x: 0, y: 0 } };
   const startPosRef = { current: null as any };
   const draggingRef = { current: false };
   const movedRef = { current: false };
-  const inertiaRAF = { current: null as any };
   const openingRef = { current: false };
   const openStartedAtRef = { current: 0 };
-  const lastDragEndAt = { current: 0 };
 
   const scrollLockedRef = { current: false };
   const lockScroll = () => {
@@ -209,7 +192,7 @@ export function initDomeGallery(
 
   // Populate sphere with items
   const sphere = sphereRef.current;
-  items.forEach((item, i) => {
+  items.forEach((item) => {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item';
     itemDiv.dataset.src = item.src;

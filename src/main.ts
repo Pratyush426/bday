@@ -3,7 +3,6 @@ import './DomeGallery.css';
 import confetti from 'canvas-confetti';
 import { createOrbitImages } from './OrbitImages';
 import { HorizontalMotion } from './HorizontalMotion';
-import { PyroEffect } from './PyroEffect';
 import { initDomeGallery } from './DomeGallery';
 
 // --- STATE ---
@@ -30,8 +29,6 @@ const AUDIO_TRACKS: Record<string, string> = {
     'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
     'page-end': ''
 };
-
-const pyro = new PyroEffect();
 
 let currentAudioContext: HTMLAudioElement | null = null;
 let gifMotionInstance: HorizontalMotion | null = null;
