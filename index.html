@@ -458,19 +458,15 @@
             </div>
         </section>
 
-        <section id="page-end" class="page hidden">
-            <!-- Back Button -->
-            <button class="back-btn quirky-btn" data-target="page-games">← Back</button>
-            <div class="quirky-panel text-center" style="max-width: 1200px; width: 95%;">
-                <div id="page-end-masonry-container"></div>
-
-                <div class="floating-hearts mt-4">
-                    💖 ✨ 🎉 💖 ✨ 🎉
-                </div>
-
-                <button class="quirky-btn primary mt-4 next-page-btn" data-target="page-hero">Re-live the Chaos
-                    🔄</button>
+        <section id="page-end" class="page hidden" style="padding: 0; overflow: hidden; background: var(--bg-dark);">
+            <!-- Overlay UI -->
+            <div style="position: absolute; top: 20px; left: 20px; z-index: 100; display: flex; gap: 15px;">
+                <button class="back-btn quirky-btn" data-target="page-games" style="background: rgba(0,0,0,0.5) !important; backdrop-filter: blur(5px);">← Back</button>
+                <button class="quirky-btn primary next-page-btn" data-target="page-hero" style="background: rgba(255,255,255,0.1) !important; color: white !important; backdrop-filter: blur(5px);">Restart 🔄</button>
             </div>
+            
+            <!-- Full Page Masonry -->
+            <div id="page-end-masonry-container" style="width: 100%; height: 100vh;"></div>
         </section>
     </main>
 

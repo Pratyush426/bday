@@ -40,9 +40,19 @@
 
 .text-content-inner {
     color: white;
-    font-size: 1.2rem;
-    line-height: 1.4;
+    font-size: 1.5rem;
+    line-height: 1.5;
     text-transform: none;
     font-family: 'Outfit', sans-serif;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    font-weight: 500;
+}
+
+.masonry-item-content {
+    transition: box-shadow 0.3s ease;
+}
+
+.masonry-item-wrapper:hover .masonry-item-content {
+    box-shadow: 0px 20px 60px -10px rgba(255, 107, 139, 0.4);
+    border-color: rgba(255, 107, 139, 0.3);
 }
