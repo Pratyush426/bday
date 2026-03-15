@@ -24,11 +24,11 @@ const STATE: State = {
 const AUDIO_TRACKS: Record<string, string> = {
     'page-hero': '/audios/khat_ZS2Cw9qh.mp3',
     'page-gifts': '/audios/anarkali-disco-chali-koshalworldcom_t3TgPcS6.mp3',
-    'page-dome-gallery': '/audios/tum-ho-toh-saiyaara-128-kbps_JSx36EGS.mp3',
+    'page-dome-gallery': '/audios/sachi-muchi-sultan-128-kbps_dMVOc5Rc.mp3',
     'page-timeline': '/audios/jaise-mera-tu-happy-ending-128-kbps_6thWymG1.mp3',
     'page-video': '',
     'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
-    'page-end': ''
+    'page-end': '/audios/cyndi-lauper-girls-just-wanna-have-fun-mp3pm_3ncvYdMG.mp3'
 };
 
 let currentAudioContext: HTMLAudioElement | null = null;

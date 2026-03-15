@@ -102,17 +102,19 @@ function buildItems(pool: any[], seg: number) {
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
-    return ys.map(y => ({ x, y, sizeX: 2, sizeY: 2 }));
+    return ys.map(y => {
+      // Logic for "center 3 rows"
+      // Even cols: -2, 0, 2
+      // Odd cols: -1, 1, 3
+      const isCenter = c % 2 === 0 
+        ? [-2, 0, 2].includes(y)
+        : [-1, 1, 3].includes(y);
+      return { x, y, sizeX: 2, sizeY: 2, isCenter };
+    });
   });
 
-  const totalSlots = coords.length;
   if (pool.length === 0) {
     return coords.map(c => ({ ...c, src: '', alt: '' }));
-  }
-  if (pool.length > totalSlots) {
-    console.warn(
-      `[DomeGallery] Provided image count (${pool.length}) exceeds available tiles (${totalSlots}). Some images will not be shown.`
-    );
   }
 
   const normalizedImages = pool.map((image: any) => {
@@ -122,26 +124,46 @@ function buildItems(pool: any[], seg: number) {
     return { src: image.src || '', alt: image.alt || '' };
   });
 
-  const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
-
-  for (let i = 1; i < usedImages.length; i++) {
-    if (usedImages[i].src === usedImages[i - 1].src) {
-      for (let j = i + 1; j < usedImages.length; j++) {
-        if (usedImages[j].src !== usedImages[i].src) {
-          const tmp = usedImages[i];
-          usedImages[i] = usedImages[j];
-          usedImages[j] = tmp;
-          break;
-        }
-      }
-    }
+  // Unique images to ensure they all appear in the center
+  const uniqueImages = [...normalizedImages];
+  
+  // Shuffle unique images for randomness
+  for (let i = uniqueImages.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [uniqueImages[i], uniqueImages[j]] = [uniqueImages[j], uniqueImages[i]];
   }
 
-  return coords.map((c, i) => ({
-    ...c,
-    src: usedImages[i].src,
-    alt: usedImages[i].alt
-  }));
+  const centerSlots = coords.filter(c => c.isCenter);
+  const peripherySlots = coords.filter(c => !c.isCenter);
+
+  const centerAssignments = new Array(centerSlots.length);
+  
+  // Fill center slots with unique images first
+  for (let i = 0; i < centerSlots.length; i++) {
+    // Cycle through unique images to fill all center slots
+    centerAssignments[i] = uniqueImages[i % uniqueImages.length];
+  }
+
+  // Shuffle center assignments slightly to avoid obvious patterns if repeating
+  if (centerSlots.length > uniqueImages.length) {
+    // Optional: shuffle if we have more slots than images
+  }
+
+  // Fill periphery slots with random images from the pool
+  const peripheryAssignments = Array.from({ length: peripherySlots.length }, () => 
+    normalizedImages[Math.floor(Math.random() * normalizedImages.length)]
+  );
+
+  // Map back to original coordinate order to keep DOM structure consistent
+  let cIdx = 0;
+  let pIdx = 0;
+  return coords.map((coord) => {
+    if (coord.isCenter) {
+      return { ...coord, ...centerAssignments[cIdx++] };
+    } else {
+      return { ...coord, ...peripheryAssignments[pIdx++] };
+    }
+  });
 }
 
 
