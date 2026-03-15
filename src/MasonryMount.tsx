@@ -4,68 +4,50 @@ import Masonry from './Masonry';
 
 let masonryRoot: Root | null = null;
 
-const MASONRY_ITEMS = [
-    {
-      id: "msg",
-      content: (
-        <>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>Happy Birthday Ridhi ❤️</h2>
-            <p>This website took unnecessary effort but maximum love. Hope you have the best birthday ever!</p>
-        </>
-      ),
-      height: 600,
-    },
-    { id: "1", img: "/1.jpeg", height: 700 },
-    { id: "2", img: "/2.jpeg", height: 500 },
-    { id: "3", img: "/3.jpeg", height: 800 },
-    { id: "4", img: "/4.jpeg", height: 600 },
-    { id: "5", img: "/5.jpeg", height: 900 },
-    { id: "6", img: "/6.jpeg", height: 500 },
-    { id: "7", img: "/7.jpeg", height: 800 },
-    { id: "8", img: "/8.jpeg", height: 600 },
-    { id: "9", img: "/9.jpeg", height: 700 },
-    { id: "10", img: "/10.jpeg", height: 500 },
-    { id: "11", img: "/11.jpeg", height: 800 },
-    { id: "12", img: "/12.jpeg", height: 600 }
-];
-
-export function mountMasonry(containerId: string) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  if (masonryRoot) return;
-
-  // Use a larger set of images from the pool to fill the full page
-  const FULL_POOL = [
-      ...MASONRY_ITEMS,
-      { id: "13", img: "/13.jpeg", height: 700 },
-      { id: "14", img: "/14.jpeg", height: 500 },
-      { id: "15", img: "/15.jpeg", height: 800 },
-      { id: "16", img: "/16.jpeg", height: 600 },
-      { id: "17", img: "/17.jpeg", height: 900 },
-      { id: "18", img: "/18.jpeg", height: 500 },
-      { id: "19", img: "/19.jpeg", height: 800 },
-      { id: "20", img: "/20.jpeg", height: 600 },
-      { id: "21", img: "/21.jpeg", height: 700 },
-      { id: "22", img: "/22.jpeg", height: 600 },
-      { id: "23", img: "/23.jpeg", height: 800 },
-      { id: "24", img: "/24.jpeg", height: 500 },
-      { id: "25", img: "/25.jpeg", height: 700 },
-      { id: "26", img: "/26.jpeg", height: 600 },
+  // Use placeholder images for now as requested
+  const PICSUM_POOL = [
+      {
+        id: "msg",
+        content: (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '40px' }}>
+              <h2 style={{ fontSize: '2.5rem', marginBottom: '15px' }}>Happy Birthday Ridhi ❤️</h2>
+              <p style={{ fontSize: '1.4rem' }}>This website took unnecessary effort but maximum love. Hope you have the best birthday ever!</p>
+          </div>
+        ),
+        height: 800,
+      },
+      { id: "p1", img: "https://picsum.photos/id/1015/600/900?grayscale", height: 700 },
+      { id: "p2", img: "https://picsum.photos/id/1011/600/750?grayscale", height: 500 },
+      { id: "p3", img: "https://picsum.photos/id/1020/600/800?grayscale", height: 800 },
+      { id: "p4", img: "https://picsum.photos/id/1025/600/600?grayscale", height: 600 },
+      { id: "p5", img: "https://picsum.photos/id/1035/600/900?grayscale", height: 900 },
+      { id: "p6", img: "https://picsum.photos/id/1040/600/500?grayscale", height: 500 },
+      { id: "p7", img: "https://picsum.photos/id/1043/600/800?grayscale", height: 800 },
+      { id: "p8", img: "https://picsum.photos/id/1050/600/600?grayscale", height: 600 },
+      { id: "p9", img: "https://picsum.photos/id/1055/600/700?grayscale", height: 700 },
+      { id: "p10", img: "https://picsum.photos/id/1060/600/500?grayscale", height: 500 },
+      { id: "p11", img: "https://picsum.photos/id/1065/600/800?grayscale", height: 800 },
+      { id: "p12", img: "https://picsum.photos/id/1070/600/600?grayscale", height: 600 },
+      { id: "p13", img: "https://picsum.photos/id/1075/600/700?grayscale", height: 700 },
+      { id: "p14", img: "https://picsum.photos/id/1080/600/500?grayscale", height: 500 },
+      { id: "p15", img: "https://picsum.photos/id/1084/600/800?grayscale", height: 800 },
+      { id: "p16", img: "https://picsum.photos/id/1018/600/600?grayscale", height: 600 },
+      { id: "p17", img: "https://picsum.photos/id/1022/600/900?grayscale", height: 900 },
+      { id: "p18", img: "https://picsum.photos/id/1031/600/500?grayscale", height: 500 },
   ];
 
   masonryRoot = createRoot(container);
   masonryRoot.render(
     <React.StrictMode>
-      <div style={{ width: '100%', height: '100vh', overflowY: 'auto', padding: '20px', paddingTop: '80px', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', height: '100vh', overflowY: 'auto', boxSizing: 'border-box' }}>
         <Masonry
-            items={FULL_POOL}
+            items={PICSUM_POOL}
             ease="power3.out"
             duration={0.6}
             stagger={0.05}
             animateFrom="bottom"
             scaleOnHover
-            hoverScale={1.02}
+            hoverScale={1.0}
             blurToFocus
             colorShiftOnHover={false}
         />
