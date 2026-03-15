@@ -59,7 +59,26 @@ export const DEFAULT_IMAGES = [
   { src: '/58.jpeg', alt: 'Image 58' },
   { src: '/59.jpeg', alt: 'Image 59' },
   { src: '/60.jpeg', alt: 'Image 60' },
-  { src: '/61.jpeg', alt: 'Image 61' }
+  { src: '/61.jpeg', alt: 'Image 61' },
+  { src: '/62.jpeg', alt: 'Image 62' },
+  { src: '/63.jpeg', alt: 'Image 63' },
+  { src: '/64.jpeg', alt: 'Image 64' },
+  { src: '/65.jpeg', alt: 'Image 65' },
+  { src: '/66.jpeg', alt: 'Image 66' },
+  { src: '/67.jpeg', alt: 'Image 67' },
+  { src: '/68.jpeg', alt: 'Image 68' },
+  { src: '/69.jpeg', alt: 'Image 69' },
+  { src: '/70.jpeg', alt: 'Image 70' },
+  { src: '/71.jpeg', alt: 'Image 71' },
+  { src: '/72.jpeg', alt: 'Image 72' },
+  { src: '/73.jpeg', alt: 'Image 73' },
+  { src: '/74.jpeg', alt: 'Image 74' },
+  { src: '/75.jpeg', alt: 'Image 75' },
+  { src: '/76.jpeg', alt: 'Image 76' },
+  { src: '/77.jpeg', alt: 'Image 77' },
+  { src: '/78.jpeg', alt: 'Image 78' },
+  { src: '/79.jpeg', alt: 'Image 79' },
+  { src: '/80.jpeg', alt: 'Image 80' }
 ];
 
 const DEFAULTS = {

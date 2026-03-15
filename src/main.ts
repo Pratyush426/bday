@@ -25,7 +25,7 @@ const AUDIO_TRACKS: Record<string, string> = {
     'page-hero': '/audios/khat_ZS2Cw9qh.mp3',
     'page-gifts': '/audios/anarkali-disco-chali-koshalworldcom_t3TgPcS6.mp3',
     'page-dome-gallery': '/audios/tum-ho-toh-saiyaara-128-kbps_JSx36EGS.mp3',
-    'page-timeline': '',
+    'page-timeline': '/audios/jaise-mera-tu-happy-ending-128-kbps_6thWymG1.mp3',
     'page-video': '',
     'page-games': '/audios/shake-your-bootiya-finding-fanny-128-kbps_p3NeO6Jp.mp3',
     'page-end': ''
@@ -78,6 +78,11 @@ function setupUnveilOverlay() {
             overlay.classList.add('unveiled');
             playTrackForPage('page-hero');
             
+            // Start the hero content fade-away timer only after unveiling
+            document.querySelectorAll('.fade-away-wrapper').forEach(el => {
+                el.classList.add('start-animation');
+            });
+            
             // Remove from DOM after animation
             setTimeout(() => {
                 overlay.style.display = 'none';
@@ -122,11 +127,24 @@ const PAGE_ASSETS: Record<string, string[]> = {
     'page-hero': ['/hero-bg.png'],
     'page-gifts': GIFT_GIFS,
     'page-dome-gallery': [], 
-    'page-timeline': [], 
-    'page-video': ['/6th Main Road 7.m4a.mp4'],
+    'page-timeline': [
+        '/WhatsApp Video 2026-03-14 at 5.50.00 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 11.28.31 AM.mp4',
+        '/WhatsApp Video 2026-03-14 at 5.50.00 PM (1).mp4',
+        '/WhatsApp Video 2026-03-14 at 5.50.00 PM (2).mp4',
+        '/WhatsApp Video 2026-03-15 at 3.27.19 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 3.28.57 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 3.37.35 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 3.38.20 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 3.50.44 PM.mp4',
+        '/WhatsApp Video 2026-03-15 at 3.50.44 PM (1).mp4'
+    ], 
+    'page-video': ['/All we want to say is.mp4'],
     'page-games': [
         "/WhatsApp_Image_2026-03-13_at_1.56.34_PM-removebg-preview.png",
-        "/111.jpeg", "/112.jpeg", "/113.jpeg", "/114.jpeg"
+        "/111.jpeg", "/112.jpeg", "/113.jpeg", "/114.jpeg",
+        "/WhatsApp Image 2026-03-15 at 3.53.27 PM.jpeg",
+        "/WhatsApp Image 2026-03-15 at 4.01.12 PM.jpeg"
     ],
     'page-end': []
 };
@@ -140,7 +158,14 @@ const preloadedPages = new Set<string>();
 async function preloadPageAssets(pageId: string) {
     if (preloadedPages.has(pageId)) return Promise.resolve();
     
-    const assets = PAGE_ASSETS[pageId] || [];
+    let assets = [...(PAGE_ASSETS[pageId] || [])];
+    
+    // Include audio track in preloading
+    const audioTrack = AUDIO_TRACKS[pageId];
+    if (audioTrack) {
+        assets.push(audioTrack);
+    }
+
     if (assets.length === 0) {
         preloadedPages.add(pageId);
         return Promise.resolve();
@@ -151,8 +176,13 @@ async function preloadPageAssets(pageId: string) {
             if (src.endsWith('.mp4') || src.endsWith('.m4v') || src.endsWith('.m4a')) {
                 const video = document.createElement('video');
                 video.onloadedmetadata = resolve;
-                video.onerror = resolve; // Continue even if one fails
+                video.onerror = resolve; 
                 video.src = src;
+            } else if (src.endsWith('.mp3') || src.endsWith('.wav') || src.indexOf('/audios/') !== -1) {
+                const audio = new Audio(src);
+                audio.oncanplaythrough = () => resolve(true);
+                audio.onerror = () => resolve(false);
+                audio.load();
             } else {
                 const img = new Image();
                 img.onload = resolve;
@@ -170,7 +200,7 @@ async function preloadPageAssets(pageId: string) {
 function updateButtonStates() {
     document.querySelectorAll('.next-page-btn').forEach(btn => {
         // Skip specialized buttons or ones the user wants to stay active
-        if (btn.id === 'dome-gallery-next-btn') {
+        if (btn.id === 'dome-gallery-next-btn' || btn.id === 'final-proceed-btn') {
             btn.classList.remove('loading');
             (btn as HTMLButtonElement).disabled = false;
             return;
@@ -334,6 +364,17 @@ function navigateTo(pageId: string) {
         items.forEach((item, index) => {
             setTimeout(() => item.classList.add('visible'), 300 + index * 600);
         });
+
+        // Add reveal logic for Pratyush button
+        const revealBtn = document.getElementById('reveal-pratyush-btn');
+        const revealedName = document.getElementById('revealed-pratyush');
+        if (revealBtn && revealedName) {
+            revealBtn.onclick = (e) => {
+                e.stopPropagation();
+                revealBtn.classList.add('hidden');
+                revealedName.classList.remove('hidden');
+            };
+        }
     }
 
     // Init OrbitImages when entering the games page
@@ -342,6 +383,7 @@ function navigateTo(pageId: string) {
         if (shockOverlay) {
             shockOverlay.classList.remove('hidden');
             shockOverlay.classList.add('active');
+            fireConfetti(); // Trigger confetti burst
             setTimeout(() => {
                 shockOverlay.classList.add('hidden');
                 shockOverlay.classList.remove('active');
@@ -355,7 +397,9 @@ function navigateTo(pageId: string) {
                     "/111.jpeg",
                     "/112.jpeg",
                     "/113.jpeg",
-                    "/114.jpeg"
+                    "/114.jpeg",
+                    "/WhatsApp Image 2026-03-15 at 3.53.27 PM.jpeg",
+                    "/WhatsApp Image 2026-03-15 at 4.01.12 PM.jpeg"
                 ],
                 shape: "ellipse",
                 radiusX: 340,
@@ -366,6 +410,19 @@ function navigateTo(pageId: string) {
                 fill: true,
                 showPath: true
             });
+        }
+        
+        // Ensure the end page is ready
+        preloadPageAssets('page-end');
+
+        // Explicit handler for the final button to ensure 100% reliability
+        const finalBtn = document.getElementById('final-proceed-btn');
+        if (finalBtn) {
+            finalBtn.onclick = (e) => {
+                e.stopPropagation();
+                fireConfetti();
+                setTimeout(() => navigateTo('page-end'), 300);
+            };
         }
     }
 }
@@ -378,13 +435,17 @@ function setupNavigation() {
 
     document.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
-        if (target && (target.classList.contains('next-page-btn') || target.classList.contains('back-btn'))) {
-            const dest = target.getAttribute('data-target');
+        const navBtn = target.closest('.next-page-btn, .back-btn') as HTMLElement;
+        
+        if (navBtn) {
+            const dest = navBtn.getAttribute('data-target');
             if (dest) {
                 // If it's a next button and not ready, don't navigate
-                // EXCEPT for the dome gallery next button which the user wants to keep active
-                if (target.classList.contains('next-page-btn') && 
-                    target.id !== 'dome-gallery-next-btn' && 
+                // EXCEPT for the dome gallery next button and the final button
+                const bypassReadyCheck = navBtn.id === 'dome-gallery-next-btn' || navBtn.id === 'final-proceed-btn';
+                
+                if (navBtn.classList.contains('next-page-btn') && 
+                    !bypassReadyCheck && 
                     !preloadedPages.has(dest)) {
                     console.log(`Page ${dest} is NOT ready yet.`);
                     return;

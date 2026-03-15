@@ -1064,7 +1064,6 @@ h3 {
     top: 0;
     height: 100vh;
     overflow: hidden;
-    background: rgba(10, 10, 10, 0.4);
 }
 
 .sidebar-track {
@@ -1076,11 +1075,11 @@ h3 {
 }
 
 .timeline-sidebar.left .sidebar-viewport {
-    border-right: 1px solid rgba(0, 255, 255, 0.15);
+    /* Seamless transparency */
 }
 
 .timeline-sidebar.right .sidebar-viewport {
-    border-left: 1px solid rgba(0, 255, 255, 0.15);
+    /* Seamless transparency */
 }
 
 .timeline-sidebar:hover {
@@ -1091,11 +1090,11 @@ h3 {
 
 /* Sidebars are now dynamic again as per user request */
 .timeline-sidebar.left .sidebar-track {
-    animation: scroll-down 30s linear infinite;
+    animation: scroll-down 50s linear infinite;
 }
 
 .timeline-sidebar.right .sidebar-track {
-    animation: scroll-up 40s linear infinite; /* Slightly slower for variety */
+    animation: scroll-up 65s linear infinite; /* Keeps it slightly slower and less synced */
 }
 
 @keyframes scroll-up {
@@ -1504,8 +1503,8 @@ h3 {
     box-shadow: 6px 6px 0px black !important;
 }
 
-/* Float away animation for Hero Header */
-.fade-away-wrapper {
+/* Float away animation for Hero Header - only start when class is added */
+.fade-away-wrapper.start-animation {
     animation: fadeAndFloatAway 3s ease-in-out 3s forwards;
 }
 
@@ -1913,3 +1912,23 @@ h3 {
 
 /* Ensure Great Vibes is loaded - though user might want a specific 'princess' look */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+/* Mini Inline Button for Reveal */
+.mini-inline-btn {
+    background: rgba(255, 107, 139, 0.1);
+    border: 1px solid var(--accent-pink);
+    border-radius: 4px;
+    color: var(--accent-pink);
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s ease;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.mini-inline-btn:hover {
+    background: var(--accent-pink);
+    color: white;
+}
