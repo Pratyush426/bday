@@ -101,7 +101,7 @@ export class BalloonEffect {
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
         const size = 40 + Math.random() * 50;
         const left = Math.random() * 100;
-        const duration = 10 + Math.random() * 10;
+        const duration = 5 + Math.random() * 5; // Faster: 5-10s instead of 10-20s
         const delay = Math.random() * 5;
 
         balloon.style.backgroundColor = color;

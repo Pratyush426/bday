@@ -453,14 +453,14 @@ function startContinuousConfetti() {
             angle: 60,
             spread: 55,
             origin: { x: 0 },
-            colors: ['#ff6b8b', '#4d96ff', '#f9d56e']
+            colors: ['#ff6b8b', '#4d96ff', '#f9d56e', '#ff9ff3', '#54a0ff', '#00d2ff', '#9b59b6', '#e67e22']
         });
         confetti({
             particleCount: 2,
             angle: 120,
             spread: 55,
             origin: { x: 1 },
-            colors: ['#ff6b8b', '#4d96ff', '#f9d56e']
+            colors: ['#ff6b8b', '#4d96ff', '#f9d56e', '#ff9ff3', '#54a0ff', '#00d2ff', '#9b59b6', '#e67e22']
         });
         requestAnimationFrame(runConfetti);
     };
