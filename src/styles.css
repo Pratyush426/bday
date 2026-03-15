@@ -310,10 +310,24 @@ h3 {
 
 #page-avatar,
 #page-timeline,
-#page-video,
-#page-end {
+#page-video {
     max-width: 800px;
     padding: 20px;
+}
+
+#page-end {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+    max-width: none;
+}
+
+#page-end.no-max-width {
+    max-width: none !important;
 }
 
 @keyframes fadeInPage {

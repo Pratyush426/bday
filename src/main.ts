@@ -481,27 +481,34 @@ function fireConfetti() {
     }());
 }
 
-// --- HERO HOVER MASK REVEAL ---
+// --- HERO & END HOVER MASK REVEAL ---
 function setupHoverMask() {
-    const container = document.getElementById('hero-hover-mask');
-    const revealLayer = document.getElementById('hero-reveal-layer');
+    const maskSize = 350;
 
-    if (!container || !revealLayer) return;
+    const pairs = [
+        { containerId: 'hero-hover-mask', revealId: 'hero-reveal-layer', pageId: 'page-hero' },
+        { containerId: 'end-hover-mask', revealId: 'end-reveal-layer', pageId: 'page-end' }
+    ];
 
-    let maskSize = 350;
+    pairs.forEach(({ containerId, revealId, pageId }) => {
+        const container = document.getElementById(containerId);
+        const revealLayer = document.getElementById(revealId);
 
-    // Hide initially until mouse moves
-    revealLayer.style.webkitMaskSize = `0px 0px`;
-    revealLayer.style.maskSize = `0px 0px`;
+        if (!container || !revealLayer) return;
 
-    document.addEventListener('mousemove', (e) => {
-        if (STATE.currentPage !== 'page-hero') return;
+        // Hide initially
+        (revealLayer as HTMLElement).style.webkitMaskSize = `0px 0px`;
+        (revealLayer as HTMLElement).style.maskSize = `0px 0px`;
 
-        revealLayer.style.webkitMaskSize = `${maskSize}px ${maskSize}px`;
-        revealLayer.style.maskSize = `${maskSize}px ${maskSize}px`;
+        document.addEventListener('mousemove', (e) => {
+            if (STATE.currentPage !== pageId) return;
 
-        revealLayer.style.webkitMaskPosition = `${e.clientX - maskSize / 2}px ${e.clientY - maskSize / 2}px`;
-        revealLayer.style.maskPosition = `${e.clientX - maskSize / 2}px ${e.clientY - maskSize / 2}px`;
+            (revealLayer as HTMLElement).style.webkitMaskSize = `${maskSize}px ${maskSize}px`;
+            (revealLayer as HTMLElement).style.maskSize = `${maskSize}px ${maskSize}px`;
+
+            (revealLayer as HTMLElement).style.webkitMaskPosition = `${e.clientX - maskSize / 2}px ${e.clientY - maskSize / 2}px`;
+            (revealLayer as HTMLElement).style.maskPosition = `${e.clientX - maskSize / 2}px ${e.clientY - maskSize / 2}px`;
+        });
     });
 }
 

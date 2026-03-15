@@ -458,10 +458,18 @@
             </div>
         </section>
 
-        <section id="page-end" class="page hidden">
-            <!-- Back Button -->
-            <button class="back-btn quirky-btn" data-target="page-games">← Back</button>
-            <div class="quirky-panel text-center">
+        <section id="page-end" class="page hidden no-max-width">
+            <!-- HOVER MASK REVEAL AS BACKGROUND -->
+            <div class="hover-mask-container hero-mask" id="end-hover-mask">
+                <div class="mask-base-layer">
+                    <img src="/hero-bg.png" alt="Hero Background Base" style="filter: grayscale(100%); opacity: 0.8;" />
+                </div>
+                <div class="mask-reveal-layer" id="end-reveal-layer">
+                    <img src="/hero-bg.png" alt="Hero Background Reveal" />
+                </div>
+            </div>
+
+            <div class="quirky-panel text-center" style="position: relative; z-index: 10;">
                 <h1 class="gradient-text bounce-text" style="font-size: 5rem;">Happy Birthday Ridhi ❤️</h1>
                 <p class="subtitle mt-3 mb-4" style="font-size: 1.5rem; max-width: 600px; margin: 1.5rem auto;">This
                     website took unnecessary effort but maximum love. Hope you have the best birthday ever!</p>
