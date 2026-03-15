@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { createOrbitImages } from './OrbitImages';
 import { HorizontalMotion } from './HorizontalMotion';
 import { initDomeGallery } from './DomeGallery';
+import { mountMasonry } from './MasonryMount';
 
 // --- STATE ---
 interface State {
@@ -424,6 +425,10 @@ function navigateTo(pageId: string) {
                 setTimeout(() => navigateTo('page-end'), 300);
             };
         }
+    }
+
+    if (pageId === 'page-end') {
+        mountMasonry('page-end-masonry-container');
     }
 }
 
