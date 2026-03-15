@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { createOrbitImages } from './OrbitImages';
 import { HorizontalMotion } from './HorizontalMotion';
 import { initDomeGallery } from './DomeGallery';
+import { BalloonEffect } from './Balloons';
 
 // --- STATE ---
 interface State {
@@ -35,6 +36,8 @@ let currentAudioContext: HTMLAudioElement | null = null;
 let gifMotionInstance: HorizontalMotion | null = null;
 let textTickerInstance: HorizontalMotion | null = null;
 let domeGalleryInstance: any = null;
+let balloonEffectInstance: BalloonEffect | null = null;
+let isContinuousConfettiActive = false;
 
 const GIFT_GIFS = [
     "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemwzMGw2cXRvOXBvYnQxMnE1NWNuNXZsYmcxbW1hanVreWI3bjB5aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XN8YOV0H6YfVFFGxth/giphy.gif",
@@ -425,6 +428,47 @@ function navigateTo(pageId: string) {
             };
         }
     }
+
+    if (pageId === 'page-end') {
+        startContinuousConfetti();
+        if (!balloonEffectInstance) {
+            balloonEffectInstance = new BalloonEffect();
+        }
+        balloonEffectInstance.startLoop();
+    } else {
+        stopContinuousConfetti();
+        if (balloonEffectInstance) {
+            balloonEffectInstance.stopLoop();
+        }
+    }
+}
+
+function startContinuousConfetti() {
+    if (isContinuousConfettiActive) return;
+    isContinuousConfettiActive = true;
+    const runConfetti = () => {
+        if (!isContinuousConfettiActive) return;
+        confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#ff6b8b', '#4d96ff', '#f9d56e']
+        });
+        confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#ff6b8b', '#4d96ff', '#f9d56e']
+        });
+        requestAnimationFrame(runConfetti);
+    };
+    runConfetti();
+}
+
+function stopContinuousConfetti() {
+    isContinuousConfettiActive = false;
 }
 
 function setupNavigation() {
