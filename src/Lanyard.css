@@ -1,0 +1,22 @@
+.lanyard-wrapper {
+  position: relative;
+  z-index: 1000;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  height: 850px; /* Reduced from 1200px for optimized proportions */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  background: transparent;
+  transform: scale(1);
+  transform-origin: center;
+  pointer-events: auto;
+}
+
+#lanyard-root {
+    width: 100%;
+    margin-top: -6rem; /* Refined from -10rem */
+    margin-bottom: 0;
+}

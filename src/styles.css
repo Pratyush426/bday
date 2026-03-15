@@ -1035,14 +1035,136 @@ h3 {
     background: #000;
 }
 
-.circuit-page-inner {
+/* Timeline Sidebars Layout */
+.timeline-layout {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(auto, 800px) minmax(180px, 1fr);
+    justify-content: center;
+    align-items: stretch;
     width: 100%;
-    max-width: 1000px;
-    padding: 20px 20px 60px;
-    margin: 0 auto;
+    min-height: 100vh;
+    gap: 40px;
+    position: relative;
+    padding: 60px 20px;
+    box-sizing: border-box;
+}
+
+.timeline-sidebar {
+    height: 100%; /* Spans full height of the timeline container */
+    position: relative; /* Container for the sticky track */
+    opacity: 0.85;
+    z-index: 50;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    overflow: visible; /* Allow sticky child to work */
+}
+
+.sidebar-viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(10, 10, 10, 0.4);
+}
+
+.sidebar-track {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: auto;
+}
+
+.timeline-sidebar.left .sidebar-viewport {
+    border-right: 1px solid rgba(0, 255, 255, 0.15);
+}
+
+.timeline-sidebar.right .sidebar-viewport {
+    border-left: 1px solid rgba(0, 255, 255, 0.15);
+}
+
+.timeline-sidebar:hover {
+    opacity: 0.9;
+}
+
+/* Tracks are now managed as sticky children */
+
+/* Sidebars are now dynamic again as per user request */
+.timeline-sidebar.left .sidebar-track {
+    animation: scroll-down 30s linear infinite;
+}
+
+.timeline-sidebar.right .sidebar-track {
+    animation: scroll-up 40s linear infinite; /* Slightly slower for variety */
+}
+
+@keyframes scroll-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+@keyframes scroll-down {
+    0% { transform: translateY(-50%); }
+    100% { transform: translateY(0); }
+}
+
+.timeline-sidebar img,
+.timeline-sidebar video {
+    width: 90%;
+    height: 300px;
+    margin-bottom: 24px; /* Consistent spacing for perfect infinite loop */
+    border-radius: 12px;
+    object-fit: cover;
+    filter: grayscale(80%) brightness(0.8) contrast(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.timeline-sidebar img:hover,
+.timeline-sidebar video:hover {
+    transform: scale(1.05);
+    filter: grayscale(0%) brightness(1.1) contrast(1.1);
+    z-index: 10;
+}
+
+/* Make media interactive despite sidebar pointer-events none */
+.timeline-sidebar img,
+.timeline-sidebar video {
+    pointer-events: auto;
+}
+
+.circuit-page-inner {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px 0 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+/* Responsive hiding - optimized for smaller laptops */
+@media (max-width: 1200px) {
+    .timeline-layout {
+        grid-template-columns: 140px 1fr 140px;
+        gap: 20px;
+    }
+    .timeline-sidebar {
+        opacity: 0.7;
+    }
+}
+
+@media (max-width: 900px) {
+    .timeline-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .timeline-sidebar {
+        display: none;
+    }
 }
 
 .circuit-section-title {
@@ -1059,7 +1181,7 @@ h3 {
     font-size: 0.9rem;
     color: #888;
     font-style: italic;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     text-align: center;
 }
 
