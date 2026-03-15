@@ -4,6 +4,12 @@ import Masonry from './Masonry';
 
 let masonryRoot: Root | null = null;
 
+export function mountMasonry(containerId: string) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (masonryRoot) return;
+
   // Use placeholder images for now as requested
   const PICSUM_POOL = [
       {
