@@ -709,7 +709,7 @@ h3 {
     position: relative;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 107, 139, 0.05);
+    background: #000;
 }
 
 /* Back button now inside header zone — top-left */
@@ -740,6 +740,7 @@ h3 {
     flex-shrink: 0;
     position: relative;
     cursor: grab;
+    background: #000;
 }
 
 .gifts-top-half:active {
@@ -753,6 +754,13 @@ h3 {
     display: block;
 }
 
+.gallery-games-container {
+    width: 100%;
+    height: 600px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
 
 .gifts-hero-img {
     width: 100%;
@@ -1946,3 +1954,166 @@ h3 {
     background: var(--accent-pink);
     color: white;
 }
+
+/* Best Brother Minigame Styles */
+.minigame-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.minigame-box:hover {
+    border-color: var(--accent-pink);
+    box-shadow: 0 15px 40px rgba(255, 107, 139, 0.2);
+}
+
+.game-question {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.4;
+    color: white;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    min-height: 100px;
+    position: relative;
+}
+
+.game-message {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    min-height: 1.5em;
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.bounce-animation {
+    animation: bounce 0.5s ease infinite;
+}
+
+#bb-no-btn {
+    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+
+/* Interactive Circular Gallery & Popup Styles */
+.gallery-games-wrapper {
+    width: 100%;
+    margin: 6rem 0;
+    position: relative;
+}
+
+.gallery-section-title {
+    font-family: 'Liquid Galaxy', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--accent-pink);
+    text-shadow: 2px 2px 10px rgba(255, 107, 139, 0.4);
+}
+
+.gallery-games-container {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(10, 10, 20, 0.6);
+    border: 1px solid rgba(255, 107, 139, 0.3);
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(255, 107, 139, 0.1);
+    display: block;
+    z-index: 10;
+}
+
+.game-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.game-popup-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.game-popup {
+    background: rgba(30, 30, 40, 0.95);
+    border: 2px solid var(--accent-pink);
+    border-radius: 30px;
+    padding: 3rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    box-shadow: 0 0 50px rgba(255, 107, 139, 0.3);
+}
+
+.game-popup-overlay.visible .game-popup {
+    transform: scale(1) translateY(0);
+}
+
+.popup-desc {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    color: #eee;
+}
+
+.gallery-games-container {
+    width: 100%;
+    height: 600px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+
+#gallery-games-container .motion-item {
+    transition: transform 0.3s ease;
+}
+
+#gallery-games-container .motion-item img {
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+#gallery-games-container .motion-item:hover img {
+    transform: scale(1.05);
+    border-color: var(--pink-primary);
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.3);
+}
+

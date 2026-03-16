@@ -37,6 +37,7 @@ let gifMotionInstance: HorizontalMotion | null = null;
 let textTickerInstance: HorizontalMotion | null = null;
 let domeGalleryInstance: any = null;
 let balloonEffectInstance: BalloonEffect | null = null;
+let gamesGalleryInstance: HorizontalMotion | null = null;
 let isContinuousConfettiActive = false;
 
 const GIFT_GIFS = [
@@ -246,6 +247,14 @@ function navigateTo(pageId: string) {
         }
     }
 
+    // Destroy games gallery when leaving games page
+    if (STATE.currentPage === 'page-games' && pageId !== 'page-games') {
+        if (gamesGalleryInstance) {
+            gamesGalleryInstance.destroy();
+            gamesGalleryInstance = null;
+        }
+    }
+
     const target = document.getElementById(pageId);
     if (target) {
         target.classList.remove('hidden');
@@ -317,9 +326,6 @@ function navigateTo(pageId: string) {
             welcomeOverlay.classList.remove('hidden');
             welcomeOverlay.classList.remove('vanish');
             
-            // Note: Dome preloading is now handled by the global system
-            // But we keep the specialized button logic for the "spin" behavior
-
             lessGoBtn.onclick = () => {
                 welcomeOverlay.classList.add('vanish');
                 setTimeout(() => {
@@ -355,6 +361,13 @@ function navigateTo(pageId: string) {
                     }
                 });
             }
+        }
+    }
+
+    // Init games scroller when entering games page
+    if (pageId === 'page-games') {
+        if (!gamesGalleryInstance) {
+            setupMinigames();
         }
     }
 
@@ -414,7 +427,7 @@ function navigateTo(pageId: string) {
                 showPath: true
             });
         }
-        
+
         // Ensure the end page is ready
         preloadPageAssets('page-end');
 
@@ -721,46 +734,22 @@ function activateUltimateMode() {
 
 // --- MINIGAMES LOGIC ---
 function setupMinigames() {
-    // 1. Catch the Cake (Escaping Button)
-    const runawayBtn = document.getElementById('runaway-btn') as HTMLButtonElement | null;
-    const gameArea = document.getElementById('catch-cake-area');
+    // Interactive Horizontal Motion Gallery in Games Section
+    const gamesGalleryContainer = document.getElementById('gallery-games-container');
+    if (gamesGalleryContainer) {
+        const galleryItems = [
+            '/1.jpeg', '/2.jpeg', '/3.jpeg', '/4.jpeg',
+            '/5.jpeg', '/6.jpeg', '/7.jpeg', '/8.jpeg'
+        ];
 
-    if (runawayBtn && gameArea) {
-        runawayBtn.addEventListener('mouseover', () => {
-            const areaRect = gameArea.getBoundingClientRect();
-            const btnRect = runawayBtn.getBoundingClientRect();
-
-            // Calculate random positions within the game area bounds
-            const maxX = areaRect.width - btnRect.width;
-            const maxY = areaRect.height - btnRect.height;
-
-            const newX = Math.floor(Math.random() * maxX);
-            const newY = Math.floor(Math.random() * maxY);
-
-            runawayBtn.style.left = `${newX}px`;
-            runawayBtn.style.top = `${newY}px`;
-        });
-
-        runawayBtn.addEventListener('click', () => {
-            alert("HOW DID YOU CATCH IT?! You win a free piece of virtual cake. 🍰");
-        });
-    }
-
-    // 2. Rage Clicker
-    const rageBtn = document.getElementById('rage-click-btn');
-    const rageScoreDisplay = document.getElementById('rage-score');
-    let rageScore = 0;
-
-    if (rageBtn && rageScoreDisplay) {
-        rageBtn.addEventListener('click', () => {
-            rageScore++;
-            rageScoreDisplay.textContent = `Score: ${rageScore}`;
-
-            // Make button jitter slightly on click for chaotic effect
-            rageBtn.style.transform = `scale(0.95) translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
-            setTimeout(() => {
-                rageBtn.style.transform = 'scale(1) translate(0px, 0px)';
-            }, 50);
+        gamesGalleryInstance = new HorizontalMotion(gamesGalleryContainer, {
+            items: galleryItems,
+            type: 'image',
+            itemWidth: 300,
+            itemHeight: 400,
+            gap: 30,
+            speed: 1.2
         });
     }
 }
+
