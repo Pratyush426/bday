@@ -8,6 +8,7 @@ export interface MotionOptions {
     fontSize?: string;
     fontWeight?: string;
     textColor?: string;
+    onItemClick?: (content: string, index: number) => void;
 }
 
 export class HorizontalMotion {
@@ -17,6 +18,8 @@ export class HorizontalMotion {
     private scroll = { target: 0, current: 0, last: 0, ease: 0.05 };
     private isDown = false;
     private startX = 0;
+    private startY = 0;
+    private startTime = 0;
     private rafId: number = 0;
 
     constructor(container: HTMLElement, options: MotionOptions) {
@@ -76,6 +79,12 @@ export class HorizontalMotion {
                 item.style.fontFamily = "'Space Grotesk', sans-serif";
                 item.style.textTransform = 'uppercase';
             }
+
+            // Add play badge from GameModal.css
+            const badge = document.createElement('div');
+            badge.className = 'play-badge';
+            badge.textContent = 'Play Game';
+            item.appendChild(badge);
             
             this.container.appendChild(item);
             this.domItems.push(item);
@@ -86,18 +95,23 @@ export class HorizontalMotion {
     }
 
     private addEvents() {
-        this.container.addEventListener('mousedown', (e) => this.onDown(e.clientX));
+        this.container.addEventListener('mousedown', (e) => this.onDown(e.clientX, e.clientY));
         window.addEventListener('mousemove', (e) => this.onMove(e.clientX));
-        window.addEventListener('mouseup', () => this.onUp());
+        window.addEventListener('mouseup', (e) => this.onUp(e.clientX, e.clientY));
         
-        this.container.addEventListener('touchstart', (e) => this.onDown(e.touches[0].clientX), { passive: true });
+        this.container.addEventListener('touchstart', (e) => this.onDown(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
         this.container.addEventListener('touchmove', (e) => this.onMove(e.touches[0].clientX), { passive: true });
-        this.container.addEventListener('touchend', () => this.onUp());
+        this.container.addEventListener('touchend', (e) => {
+            const touch = e.changedTouches[0];
+            this.onUp(touch.clientX, touch.clientY);
+        });
     }
 
-    private onDown(x: number) {
+    private onDown(x: number, y: number) {
         this.isDown = true;
         this.startX = x;
+        this.startY = y;
+        this.startTime = Date.now();
         this.container.style.cursor = 'grabbing';
     }
 
@@ -108,7 +122,28 @@ export class HorizontalMotion {
         this.startX = x;
     }
 
-    private onUp() {
+    private onUp(x?: number, y?: number) {
+        if (this.isDown && x !== undefined && y !== undefined) {
+            const duration = Date.now() - this.startTime;
+            const dist = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
+            
+            // If it was a quick tap with little movement, it's a click
+            if (duration < 250 && dist < 10) {
+                // Find clicked item
+                
+                // Which item is under this X?
+                // This is an estimation based on current item positions
+                this.domItems.forEach((item, i) => {
+                    const itemRect = item.getBoundingClientRect();
+                    if (x >= itemRect.left && x <= itemRect.right &&
+                        y >= itemRect.top && y <= itemRect.bottom) {
+                        const originalIndex = i % this.options.items.length;
+                        this.options.onItemClick?.(this.options.items[originalIndex], originalIndex);
+                    }
+                });
+            }
+        }
+
         this.isDown = false;
         this.container.style.cursor = 'grab';
     }

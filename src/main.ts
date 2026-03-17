@@ -1,5 +1,6 @@
 import './styles.css';
 import './DomeGallery.css';
+import './GameModal.css';
 import confetti from 'canvas-confetti';
 import { createOrbitImages } from './OrbitImages';
 import { HorizontalMotion } from './HorizontalMotion';
@@ -738,8 +739,7 @@ function setupMinigames() {
     const gamesGalleryContainer = document.getElementById('gallery-games-container');
     if (gamesGalleryContainer) {
         const galleryItems = [
-            '/1.jpeg', '/2.jpeg', '/3.jpeg', '/4.jpeg',
-            '/5.jpeg', '/6.jpeg', '/7.jpeg', '/8.jpeg'
+            '/a1.png', '/a2.png', '/a3.png', '/4.jpeg', '/5.jpeg'
         ];
 
         gamesGalleryInstance = new HorizontalMotion(gamesGalleryContainer, {
@@ -748,7 +748,10 @@ function setupMinigames() {
             itemWidth: 300,
             itemHeight: 400,
             gap: 30,
-            speed: 1.2
+            speed: 1.2,
+            onItemClick: (_, index) => {
+                import('./GameModal').then(mod => mod.openGameModal(index));
+            }
         });
     }
 }

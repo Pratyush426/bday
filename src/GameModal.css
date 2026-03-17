@@ -1,0 +1,173 @@
+.game-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.game-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.game-modal-container {
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    width: 95%;
+    max-width: 1000px; /* Increased from 900px to fit long words */
+    min-height: 500px;
+    padding: 50px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: modalSlide 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.game-modal-overlay.active .game-modal-container {
+    transform: scale(1) translateY(0);
+}
+
+.game-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.game-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.game-content {
+    margin-top: 1rem;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Tic Tac Toe Specific */
+.ttt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 320px;
+    margin: 1rem auto;
+}
+
+.ttt-cell {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.ttt-cell:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ttt-cell:active {
+    transform: scale(0.95);
+}
+
+.ttt-cell.x { color: var(--accent-pink, #ff6b8b); }
+.ttt-cell.o { color: var(--accent-blue, #4d96ff); }
+
+/* Quiz Specific */
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 2rem;
+}
+
+.quiz-option {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+
+.quiz-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+.quiz-option.correct {
+    background: rgba(0, 255, 128, 0.2);
+    border-color: #00ff80;
+}
+
+.quiz-option.wrong {
+    background: rgba(255, 0, 64, 0.2);
+    border-color: #ff0040;
+}
+
+/* Play Badge Overlay for Items */
+.play-badge {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    border-radius: 20px;
+    pointer-events: none;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 2px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.motion-item:hover .play-badge {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+}
