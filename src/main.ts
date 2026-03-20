@@ -45,7 +45,7 @@ const GIFT_GIFS = [
     "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemwzMGw2cXRvOXBvYnQxMnE1NWNuNXZsYmcxbW1hanVreWI3bjB5aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XN8YOV0H6YfVFFGxth/giphy.gif",
     "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDZ4MG4yMHFua3JsbmdsdHc4azQzdGxnaGwxaGs5NW8xMGphc2gyciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wVmt9Gh02y6u0FAd6J/giphy.gif",
     "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDBzZW4zeThubzdiMHRmMmNvN3kyMHlmem1ycTNuamhwd3d1ZHAzeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/knLRouBQlkniWmx0hp/giphy.gif",
-    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmI5MDB1N3BidW5ndTh0a2c2a2t6czFxM29yc3FldWJsb3YydzBkeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/66CRyMw8X9bhQFs8Je/giphy.gif",
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3g5eHA4eHIydjlyZDI5YTkxbXB5NzVoMW1sNjIwNjJhM2tpb2g5biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUA7b68hKy839wiVJC/giphy.gif",
     "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTNxd3V4czE5cHZ6dXBzYnpnZXoyOGhndW42ODRyYXI0dmUzazU3dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aosOPhpJHrJq8/giphy.gif",
     "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTB2anA2OWMweG9wMDlmY2oxNGl6cW44MWxjYjJwd3VtMGZkdm1yYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7qE2VAxuXWeyvJIY/giphy.gif",
     "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTVrdTJtOWhqYXRhMDE1OHljcm92eW9sa2trOWRxNGZzc3NjMHEyaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Eyepo7itqjQcVc82Nf/giphy.gif",
@@ -82,12 +82,13 @@ function setupUnveilOverlay() {
         unveilBtn.addEventListener('click', () => {
             overlay.classList.add('unveiled');
             playTrackForPage('page-hero');
-            
+            fireConfetti();
+
             // Start the hero content fade-away timer only after unveiling
             document.querySelectorAll('.fade-away-wrapper').forEach(el => {
                 el.classList.add('start-animation');
             });
-            
+
             // Remove from DOM after animation
             setTimeout(() => {
                 overlay.style.display = 'none';
@@ -131,7 +132,7 @@ function playTrackForPage(pageId: string) {
 const PAGE_ASSETS: Record<string, string[]> = {
     'page-hero': ['/hero-bg.png'],
     'page-gifts': GIFT_GIFS,
-    'page-dome-gallery': [], 
+    'page-dome-gallery': [],
     'page-timeline': [
         '/WhatsApp Video 2026-03-14 at 5.50.00 PM.mp4',
         '/WhatsApp Video 2026-03-15 at 11.28.31 AM.mp4',
@@ -143,7 +144,7 @@ const PAGE_ASSETS: Record<string, string[]> = {
         '/WhatsApp Video 2026-03-15 at 3.38.20 PM.mp4',
         '/WhatsApp Video 2026-03-15 at 3.50.44 PM.mp4',
         '/WhatsApp Video 2026-03-15 at 3.50.44 PM (1).mp4'
-    ], 
+    ],
     'page-video': ['/All we want to say is.mp4'],
     'page-games': [
         "/WhatsApp_Image_2026-03-13_at_1.56.34_PM-removebg-preview.png",
@@ -162,9 +163,9 @@ const preloadedPages = new Set<string>();
 
 async function preloadPageAssets(pageId: string) {
     if (preloadedPages.has(pageId)) return Promise.resolve();
-    
+
     let assets = [...(PAGE_ASSETS[pageId] || [])];
-    
+
     // Include audio track in preloading
     const audioTrack = AUDIO_TRACKS[pageId];
     if (audioTrack) {
@@ -181,7 +182,7 @@ async function preloadPageAssets(pageId: string) {
             if (src.endsWith('.mp4') || src.endsWith('.m4v') || src.endsWith('.m4a')) {
                 const video = document.createElement('video');
                 video.onloadedmetadata = resolve;
-                video.onerror = resolve; 
+                video.onerror = resolve;
                 video.src = src;
             } else if (src.endsWith('.mp3') || src.endsWith('.wav') || src.indexOf('/audios/') !== -1) {
                 const audio = new Audio(src);
@@ -210,7 +211,7 @@ function updateButtonStates() {
             (btn as HTMLButtonElement).disabled = false;
             return;
         }
-        
+
         const dest = btn.getAttribute('data-target');
         if (dest && preloadedPages.has(dest)) {
             btn.classList.remove('loading');
@@ -278,11 +279,11 @@ function navigateTo(pageId: string) {
     if (pageId === 'page-gifts') {
         // Proactively preload the dome gallery since it's the next step
         preloadPageAssets('page-dome-gallery');
-        
+
         if (!gifMotionInstance) {
             const galleryContainer = document.getElementById('circular-gallery-container');
             const tickerContainer = document.getElementById('text-ticker-container');
-            
+
             if (galleryContainer) {
                 requestAnimationFrame(() => {
                     gifMotionInstance = new HorizontalMotion(galleryContainer, {
@@ -295,21 +296,21 @@ function navigateTo(pageId: string) {
                     });
                 });
             }
-            
+
             if (tickerContainer) {
                 requestAnimationFrame(() => {
                     textTickerInstance = new HorizontalMotion(tickerContainer, {
                         items: [
-                            "behen ka bday 🎂", 
-                            "chudail 👻", 
-                            "haathi 🐘", 
+                            "behen ka bday 🎂",
+                            "chudail 👻",
+                            "haathi 🐘",
                             "chal nikal 🚀"
                         ],
                         type: 'text',
                         itemWidth: 280,
                         itemHeight: 40,
                         gap: 80,
-                        speed: -1.2, 
+                        speed: -1.2,
                         fontSize: '1.2rem',
                         textColor: 'var(--accent-pink)'
                     });
@@ -322,11 +323,11 @@ function navigateTo(pageId: string) {
     if (pageId === 'page-dome-gallery') {
         const welcomeOverlay = document.getElementById('dome-welcome-overlay');
         const lessGoBtn = document.getElementById('dome-less-go-btn') as HTMLButtonElement | null;
-        
+
         if (welcomeOverlay && lessGoBtn) {
             welcomeOverlay.classList.remove('hidden');
             welcomeOverlay.classList.remove('vanish');
-            
+
             lessGoBtn.onclick = () => {
                 welcomeOverlay.classList.add('vanish');
                 setTimeout(() => {
@@ -494,16 +495,16 @@ function setupNavigation() {
     document.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
         const navBtn = target.closest('.next-page-btn, .back-btn') as HTMLElement;
-        
+
         if (navBtn) {
             const dest = navBtn.getAttribute('data-target');
             if (dest) {
                 // If it's a next button and not ready, don't navigate
                 // EXCEPT for the dome gallery next button and the final button
                 const bypassReadyCheck = navBtn.id === 'dome-gallery-next-btn' || navBtn.id === 'final-proceed-btn';
-                
-                if (navBtn.classList.contains('next-page-btn') && 
-                    !bypassReadyCheck && 
+
+                if (navBtn.classList.contains('next-page-btn') &&
+                    !bypassReadyCheck &&
                     !preloadedPages.has(dest)) {
                     console.log(`Page ${dest} is NOT ready yet.`);
                     return;
@@ -739,7 +740,7 @@ function setupMinigames() {
     const gamesGalleryContainer = document.getElementById('gallery-games-container');
     if (gamesGalleryContainer) {
         const galleryItems = [
-            '/a1.png', '/a2.png', '/a3.png', '/4.jpeg', '/5.jpeg'
+            '/a1.png', '/a2.png', '/a3.png', '/a4.png', '/a5.png'
         ];
 
         gamesGalleryInstance = new HorizontalMotion(gamesGalleryContainer, {
@@ -749,6 +750,7 @@ function setupMinigames() {
             itemHeight: 400,
             gap: 30,
             speed: 1.2,
+            showBadge: true,
             onItemClick: (_, index) => {
                 import('./GameModal').then(mod => mod.openGameModal(index));
             }

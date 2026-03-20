@@ -1,11 +1,11 @@
-import { Minigame, TicTacToe, RidhiQuiz, GuessThePerson, BestBrotherGame, RidhimaAcrostic } from './Minigames';
+import { Minigame, RidhiMemoryMatch, RidhiQuiz, GuessThePerson, BestBrotherGame, RidhimaAcrostic } from './Minigames';
 
 export class GameModal {
     private static instance: GameModal;
     private overlay: HTMLElement;
     private content: HTMLElement;
     private currentMinigame: Minigame | null = null;
-    private games: (new () => Minigame)[] = [GuessThePerson, RidhimaAcrostic, BestBrotherGame, TicTacToe, RidhiQuiz];
+    private games: (new () => Minigame)[] = [GuessThePerson, RidhimaAcrostic, BestBrotherGame, RidhiMemoryMatch, RidhiQuiz];
     private currentGameIndex = 0;
 
     private constructor() {

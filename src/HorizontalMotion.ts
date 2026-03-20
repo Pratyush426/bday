@@ -8,6 +8,8 @@ export interface MotionOptions {
     fontSize?: string;
     fontWeight?: string;
     textColor?: string;
+    showBadge?: boolean;
+    badgeText?: string;
     onItemClick?: (content: string, index: number) => void;
 }
 
@@ -32,6 +34,8 @@ export class HorizontalMotion {
             fontSize: '1.5rem',
             fontWeight: 'bold',
             textColor: '#ffffff',
+            showBadge: false,
+            badgeText: 'Play Game',
             ...options
         };
         this.init();
@@ -80,11 +84,12 @@ export class HorizontalMotion {
                 item.style.textTransform = 'uppercase';
             }
 
-            // Add play badge from GameModal.css
-            const badge = document.createElement('div');
-            badge.className = 'play-badge';
-            badge.textContent = 'Play Game';
-            item.appendChild(badge);
+            if (this.options.showBadge) {
+                const badge = document.createElement('div');
+                badge.className = 'play-badge';
+                badge.textContent = this.options.badgeText || 'Play Game';
+                item.appendChild(badge);
+            }
             
             this.container.appendChild(item);
             this.domItems.push(item);

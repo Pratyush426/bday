@@ -4,84 +4,106 @@ export interface Minigame {
     destroy?: () => void;
 }
 
-export class TicTacToe implements Minigame {
-    name = "Ridhi's X vs O";
-    private board: (string | null)[] = Array(9).fill(null);
-    private currentPlayer: 'X' | 'O' = 'X';
+export class RidhiMemoryMatch implements Minigame {
+    name = "Ridhi's Memory Match";
     private container: HTMLElement | null = null;
+    private cards: string[] = [];
+    private flippedIndices: number[] = [];
+    private matchedIndices: number[] = [];
+    private moves: number = 0;
+    private isLocked: boolean = false;
+
+    private emojis = ['🍔', '🥤', '✈️', '🛍️', '👸', '💖'];
 
     render(container: HTMLElement) {
         this.container = container;
-        container.innerHTML = `
-            <h3 style="margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem;">${this.name}</h3>
-            <div class="ttt-grid">
-                ${Array(9).fill(0).map((_, i) => `<div class="ttt-cell" data-index="${i}"></div>`).join('')}
+        this.resetGame();
+    }
+
+    private resetGame() {
+        this.cards = [...this.emojis, ...this.emojis].sort(() => Math.random() - 0.5);
+        this.flippedIndices = [];
+        this.matchedIndices = [];
+        this.moves = 0;
+        this.isLocked = false;
+        this.drawBoard();
+    }
+
+    private drawBoard() {
+        if (!this.container) return;
+        this.container.innerHTML = `
+            <div style="text-align: center; width: 100%;">
+                <h3 style="margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem;">${this.name}</h3>
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem; opacity: 0.8;">Find all the matching pairs! Moves: <strong style="color: var(--accent-pink);">${this.moves}</strong></p>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 320px; margin: 0 auto; perspective: 1000px;">
+                    ${this.cards.map((emoji, idx) => {
+                        const isFlipped = this.flippedIndices.includes(idx) || this.matchedIndices.includes(idx);
+                        return `
+                        <div class="memory-card" data-index="${idx}" style="
+                            width: 100%; aspect-ratio: 1; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                            ${isFlipped ? 'transform: rotateY(180deg);' : ''}
+                        ">
+                            <div style="position: absolute; inset: 0; backface-visibility: hidden; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; display: grid; place-items: center; font-size: 2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                                ❓
+                            </div>
+                            <div style="position: absolute; inset: 0; backface-visibility: hidden; background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); border-radius: 12px; display: grid; place-items: center; font-size: 2.5rem; transform: rotateY(180deg); box-shadow: 0 4px 15px rgba(255,107,139,0.4);">
+                                ${emoji}
+                            </div>
+                        </div>
+                    `}).join('')}
+                </div>
+                ${this.matchedIndices.length === this.cards.length ? `
+                    <div style="margin-top: 2rem; color: #00ff80; font-size: 1.4rem; font-weight: bold; animation: princessEntrance 0.6s ease forwards;">You won in ${this.moves} moves! 🎉</div>
+                    <button class="quirky-btn primary mt-3" id="memory-reset" style="padding: 10px 25px;">Play Again 🔄</button>
+                ` : ''}
             </div>
-            <div id="ttt-status" style="margin-top: 1rem; font-weight: bold; font-size: 1.2rem;">Player X's Turn</div>
-            <button class="quirky-btn primary mt-3" id="ttt-reset" style="padding: 10px 20px;">Reset Game</button>
         `;
 
-        const cells = container.querySelectorAll('.ttt-cell');
-        cells.forEach(cell => {
-            cell.addEventListener('click', (e) => {
+        this.container.querySelectorAll('.memory-card').forEach(card => {
+            card.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.handleMove(cell as HTMLElement);
+                this.handleCardClick(parseInt((card as HTMLElement).getAttribute('data-index') || '0'));
             });
         });
 
-        const resetBtn = container.querySelector('#ttt-reset');
-        resetBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.reset();
-        });
+        const resetBtn = this.container.querySelector('#memory-reset');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.resetGame();
+            });
+        }
     }
 
-    private handleMove(cell: HTMLElement) {
-        const index = parseInt(cell.getAttribute('data-index') || '0');
-        if (this.board[index] || this.checkWinner()) return;
+    private handleCardClick(index: number) {
+        if (this.isLocked || this.flippedIndices.includes(index) || this.matchedIndices.includes(index)) return;
 
-        this.board[index] = this.currentPlayer;
-        cell.textContent = this.currentPlayer;
-        cell.classList.add(this.currentPlayer.toLowerCase());
+        this.flippedIndices.push(index);
+        this.drawBoard(); // flip first card
 
-        const winner = this.checkWinner();
-        const status = this.container?.querySelector('#ttt-status');
+        if (this.flippedIndices.length === 2) {
+            this.moves++;
+            this.isLocked = true;
+            this.drawBoard(); // update move count and flip second card
 
-        if (winner) {
-            if (status) status.textContent = winner === 'Draw' ? "It's a Draw!" : `Player ${winner} Wins! 🎉`;
-        } else {
-            this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-            if (status) status.textContent = `Player ${this.currentPlayer}'s Turn`;
-
-            if (this.currentPlayer === 'O') {
-                setTimeout(() => this.makeAIMove(), 500);
+            const [idx1, idx2] = this.flippedIndices;
+            if (this.cards[idx1] === this.cards[idx2]) {
+                // Match
+                setTimeout(() => {
+                    this.matchedIndices.push(idx1, idx2);
+                    this.flippedIndices = [];
+                    this.isLocked = false;
+                    this.drawBoard();
+                }, 400); // small delay to let the flip animation finish
+            } else {
+                // No match
+                setTimeout(() => {
+                    this.flippedIndices = [];
+                    this.isLocked = false;
+                    this.drawBoard(); // flip back
+                }, 1000);
             }
         }
-    }
-
-    private makeAIMove() {
-        if (this.checkWinner()) return;
-        const availableMoves = this.board.map((val, idx) => val === null ? idx : null).filter(val => val !== null) as number[];
-        if (availableMoves.length === 0) return;
-
-        const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        const cell = this.container?.querySelector(`.ttt-cell[data-index="${randomMove}"]`) as HTMLElement;
-        if (cell) this.handleMove(cell);
-    }
-
-    private checkWinner() {
-        const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-        for (const [a, b, c] of lines) {
-            if (this.board[a] && this.board[a] === this.board[b] && this.board[a] === this.board[c]) return this.board[a];
-        }
-        if (!this.board.includes(null)) return 'Draw';
-        return null;
-    }
-
-    private reset() {
-        this.board = Array(9).fill(null);
-        this.currentPlayer = 'X';
-        if (this.container) this.render(this.container);
     }
 }
 
@@ -92,16 +114,16 @@ export class RidhiQuiz implements Minigame {
     private container: HTMLElement | null = null;
     private questions: any[] = [
         {
-            q: "What does Pratyush like to eat the most?",
-            a: ["Chicken Biryani", "Pizza", "Pasta", "Cakess"],
+            q: "What does Ridhima like to eat the most?",
+            a: ["Khoon", "Sarr", "Time"],
             behavior: "all-correct",
-            feedback: "He basically likes everything! 😋"
+            feedback: "She basically likes everything! 😋"
         },
         {
             q: "Who is shorter?",
-            a: ["The shortest girl in India", "Mummy", "Chinti", "You"],
+            a: ["The shortest girl in India", "Your Brain", "Qutub Minar", "You"],
             correct: 0,
-            feedback: "Obviously the shortest girl in India! 😂"
+            feedback: "Obviously YOUU! 😂"
         },
         {
             q: "What does bhai like the most?",

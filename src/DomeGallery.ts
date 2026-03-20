@@ -78,7 +78,21 @@ export const DEFAULT_IMAGES = [
   { src: '/77.jpeg', alt: 'Image 77' },
   { src: '/78.jpeg', alt: 'Image 78' },
   { src: '/79.jpeg', alt: 'Image 79' },
-  { src: '/80.jpeg', alt: 'Image 80' }
+  { src: '/80.jpeg', alt: 'Image 80' },
+  { src: '/WhatsApp Image 2026-03-20 at 11.00.11 PM.jpeg', alt: 'Bday 1' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (1).jpeg', alt: 'Bday 2' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (2).jpeg', alt: 'Bday 3' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (3).jpeg', alt: 'Bday 4' },
+  { src: '/WhatsApp Image 2026-03-20 at 11.00.30 PM.jpeg', alt: 'Bday 5' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (5).jpeg', alt: 'Bday 6' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (6).jpeg', alt: 'Bday 7' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (7).jpeg', alt: 'Bday 8' },
+  { src: '/WhatsApp Image 2026-03-20 at 11.00.43 PM.jpeg', alt: 'Bday 9' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (9).jpeg', alt: 'Bday 10' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (10).jpeg', alt: 'Bday 11' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (11).jpeg', alt: 'Bday 12' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (12).jpeg', alt: 'Bday 13' },
+  { src: '/WhatsApp Image 2026-03-20 at 7.33.12 PM (13).jpeg', alt: 'Bday 14' },
 ];
 
 const DEFAULTS = {
@@ -103,13 +117,10 @@ function buildItems(pool: any[], seg: number) {
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
     return ys.map(y => {
-      // Logic for "center 3 rows"
-      // Even cols: -2, 0, 2
-      // Odd cols: -1, 1, 3
       const isCenter = c % 2 === 0 
         ? [-2, 0, 2].includes(y)
         : [-1, 1, 3].includes(y);
-      return { x, y, sizeX: 2, sizeY: 2, isCenter };
+      return { x, y, sizeX: 2, sizeY: 2, isCenter, column: c };
     });
   });
 
@@ -118,52 +129,91 @@ function buildItems(pool: any[], seg: number) {
   }
 
   const normalizedImages = pool.map((image: any) => {
-    if (typeof image === 'string') {
-      return { src: image, alt: '' };
-    }
+    if (typeof image === 'string') return { src: image, alt: '' };
     return { src: image.src || '', alt: image.alt || '' };
   });
 
-  // Unique images to ensure they all appear in the center
   const uniqueImages = [...normalizedImages];
-  
-  // Shuffle unique images for randomness
+  // Shuffle to randomize placement
   for (let i = uniqueImages.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [uniqueImages[i], uniqueImages[j]] = [uniqueImages[j], uniqueImages[i]];
   }
 
-  const centerSlots = coords.filter(c => c.isCenter);
-  const peripherySlots = coords.filter(c => !c.isCenter);
-
-  const centerAssignments = new Array(centerSlots.length);
-  
-  // Fill center slots with unique images first
-  for (let i = 0; i < centerSlots.length; i++) {
-    // Cycle through unique images to fill all center slots
-    centerAssignments[i] = uniqueImages[i % uniqueImages.length];
-  }
-
-  // Shuffle center assignments slightly to avoid obvious patterns if repeating
-  if (centerSlots.length > uniqueImages.length) {
-    // Optional: shuffle if we have more slots than images
-  }
-
-  // Fill periphery slots with random images from the pool
-  const peripheryAssignments = Array.from({ length: peripherySlots.length }, () => 
-    normalizedImages[Math.floor(Math.random() * normalizedImages.length)]
-  );
-
-  // Map back to original coordinate order to keep DOM structure consistent
-  let cIdx = 0;
-  let pIdx = 0;
-  return coords.map((coord) => {
-    if (coord.isCenter) {
-      return { ...coord, ...centerAssignments[cIdx++] };
-    } else {
-      return { ...coord, ...peripheryAssignments[pIdx++] };
-    }
+  // Tracking image usage to satisfy column gap
+  // imageSrc -> lastColumnUsed
+  const lastUsedMap = new Map<string, number>();
+  const middleRowAppearanceCount = new Map<string, number>();
+  normalizedImages.forEach(img => {
+    middleRowAppearanceCount.set(img.src, 0);
+    lastUsedMap.set(img.src, -50); // Start far back
   });
+
+  // Group slots by column for sequential processing
+  const slotsByCol: Record<number, any[]> = {};
+  coords.forEach(coord => {
+    if (!slotsByCol[coord.column]) slotsByCol[coord.column] = [];
+    slotsByCol[coord.column].push(coord);
+  });
+
+  const finalAssignments = new Map<any, any>();
+
+  // Ensure all photos appear at least once in middle rows
+  const unusedUnique = [...uniqueImages];
+  
+  for (let c = 0; c < seg; c++) {
+    const colSlots = slotsByCol[c];
+    
+    // Process each slot in the column
+    colSlots.forEach(slot => {
+      // 1. Try to find an unused unique image that satisfies the gap
+      // If the slot is center, we prioritize picking from unusedUnique
+      let bestImg = null;
+      
+      if (slot.isCenter && unusedUnique.length > 0) {
+        // Try to find one from unusedUnique that satisfies gap
+        const candidateIdx = unusedUnique.findIndex(img => (c - lastUsedMap.get(img.src)!) >= 8);
+        if (candidateIdx !== -1) {
+            bestImg = unusedUnique.splice(candidateIdx, 1)[0];
+        }
+      }
+
+      // 2. If center but no safe unused unique, or if periphery
+      if (!bestImg) {
+        const candidates = [...normalizedImages].sort(() => Math.random() - 0.5);
+        bestImg = candidates.find(img => (c - lastUsedMap.get(img.src)!) >= 8);
+      }
+
+      // 3. Fallback: if STILL no bestImg (gap cannot be met), pick the least recently used one
+      if (!bestImg) {
+        bestImg = [...normalizedImages].sort((a, b) => lastUsedMap.get(a.src)! - lastUsedMap.get(b.src)!)[0];
+      }
+
+      finalAssignments.set(slot, bestImg);
+      lastUsedMap.set(bestImg.src, c);
+      if (slot.isCenter) {
+        middleRowAppearanceCount.set(bestImg.src, (middleRowAppearanceCount.get(bestImg.src) || 0) + 1);
+      }
+    });
+  }
+
+  // Final emergency check: did we use all unique images in center rows?
+  unusedUnique.forEach(img => {
+      const centerSlotsWithReps = Array.from(finalAssignments.entries())
+        .filter(([slot, assignedImg]) => slot.isCenter && middleRowAppearanceCount.get(assignedImg.src)! > 1);
+      
+      if (centerSlotsWithReps.length > 0) {
+          const [slotToSwap, oldImg] = centerSlotsWithReps[0];
+          finalAssignments.set(slotToSwap, img);
+          middleRowAppearanceCount.set(oldImg.src, middleRowAppearanceCount.get(oldImg.src)! - 1);
+          middleRowAppearanceCount.set(img.src, 1);
+      }
+  });
+
+  return coords.map(coord => ({
+    ...coord,
+    ...finalAssignments.get(coord)
+  }));
 }
 
 
